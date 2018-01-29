@@ -1,3 +1,5 @@
+tmp/
+
 # Logs
 logs
 *.log
@@ -57,3 +59,5 @@ typings/
 # dotenv environment variables file
 .env
 
+# compiled code
+index.js
