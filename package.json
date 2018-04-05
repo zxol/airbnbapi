@@ -1,6 +1,6 @@
 {
     "name": "dcukkdikvv",
-    "version": "0.1.2",
+    "version": "0.3.0",
     "description": "ceadknsfoi",
     "main": "index.js",
     "directories": {
@@ -12,14 +12,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/OhPointNever/airbnbapi.git"
+        "url": "git+https://github.com/zxol/airbnbapi.git"
     },
     "author": "OnePointNever",
     "license": "UNLICENSED",
     "bugs": {
-        "url": "https://github.com/OhPointNever/airbnbapi/issues"
+        "url": "https://github.com/zxol/airbnbapi/issues"
     },
-    "homepage": "https://github.com/OhPointNever/airbnbapi#readme",
+    "homepage": "https://github.com/zxol/airbnbapi#readme",
     "dependencies": {
         "moment": "^2.19.3",
         "request": "^2.83.0",
