@@ -25,7 +25,8 @@
         "request": "^2.83.0",
         "request-promise": "^4.2.2",
         "winston": "^2.4.0",
-        "write-json": "^2.0.0"
+        "write-json": "^2.0.0",
+        "uuid": "*"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
