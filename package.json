@@ -22,11 +22,11 @@
     "homepage": "https://github.com/zxol/airbnbapi#readme",
     "dependencies": {
         "moment": "^2.19.3",
+        "random-useragent": "^0.3.1",
         "request": "^2.83.0",
         "request-promise": "^4.2.2",
         "winston": "^2.4.0",
-        "write-json": "^2.0.0",
-        "uuid": "*"
+        "write-json": "^2.0.0"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
