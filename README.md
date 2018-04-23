@@ -1,11 +1,12 @@
-all functions return promises
-batch functions are limited to 50 elements at a time
+all functions return promises  
+batch functions are limited to 50 elements at a time  
 
 ### AUTH
 ```
 airbnb.testAuth('faketoken3sDdfvtF9if5398j0v5nui')
 // returns bool
-
+```
+```
 airbnb.newAccessToken({username:'foo@bar.com', password:'hunter2'})
 // returns {token: 'faketoken3sDdfvtF9if5398j0v5nui'} or {error: {error obj}}
 ```
@@ -14,7 +15,8 @@ airbnb.newAccessToken({username:'foo@bar.com', password:'hunter2'})
 ```
 airbnb.getGuestInfo(2348485493)
 // returns public info about user (JSON)
-
+```
+```
 airbnb.getOwnUserInfo(token)
 // returns private info about user (JSON)
 ```
@@ -28,7 +30,8 @@ airbnb.getPublicListingCalendar({
     count: 1  
 })
 // returns array of calendar days, with availability and price
-
+```
+```
 airbnb.getCalendar({
         token: 'faketoken3sDdfvtF9if5398j0v5nui',
         id: 109834757,
@@ -36,7 +39,8 @@ airbnb.getCalendar({
         endDate: '2018-02-28',
 })
 // returns array of calendar days with extended info, for your listings
-
+```
+```
 airbnb.setPriceForDay({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 109834757,
@@ -44,7 +48,8 @@ airbnb.setPriceForDay({
     price: 1203,
 })
 // returns a result of the operation
-
+```
+```
 airbnb.setAvailabilityForDay({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 109834757,
@@ -56,9 +61,20 @@ airbnb.setAvailabilityForDay({
 
 ### LISTING
 ```
+airbnb.listingSearch({
+    location: 'New York, United States',
+    offset: 0,
+    limit: 20,
+    language: 'en-US',
+    currency: 'USD'
+})
+// returns an array of listings
+```
+```
 airbnb.getListingInfo({id: 109834757})
 // returns public info for any listing (JSON)
-
+```
+```
 airbnb.getListingInfoHost({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 109834757
@@ -73,21 +89,24 @@ airbnb.getThread({
     id: 909878797
 })
 // returns a single thread in the legacy format (JSON)
-
+```
+```
 airbnb.getThreads({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     offset: 0,
     limit: 2
 })
 // returns an array of thread IDS (only the ids, ordered by latest update) (JSON)
-
+```
+```
 airbnb.getThreadsFull({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     offset: 0,
     limit: 2
 })
 // returns an array of threads in the new format, ordered by latest update (JSON)
-
+```
+```
 airbnb.getThreadsBatch({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     ids: [23049848, 203495875, 398328244]
@@ -102,14 +121,16 @@ airbnb.getReservation({
     id: 909878797
 })
 // returns a single reservation in the mobile app format (JSON)
-
+```
+```
 airbnb.getReservations({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     offset: 0,
     limit: 10
 })
 // returns an array of reservations in the mobile app format, ordered by latest update (JSON)
-
+```
+```
 airbnb.getReservationsBatch({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     ids: [98769876, 98769543, 98756745]
@@ -118,6 +139,14 @@ airbnb.getReservationsBatch({
 ```
 ### POSTING
 ```
+airbnb.sendMessage({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    id: 2039448789,
+    message: 'Hi there!'
+})
+// returns confirmation
+```
+```
 airbnb.sendPreApproval({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     thread_id: 2039448789,
@@ -125,14 +154,8 @@ airbnb.sendPreApproval({
     message: ''
 })
 // returns confirmation
-
-airbnb.sendMessage({
-    token: 'faketoken3sDdfvtF9if5398j0v5nui',
-    id: 2039448789,
-    message: 'Hi there!'
-})
-// returns confirmation
-
+```
+```
 airbnb.sendReview({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 2039448789,
@@ -144,7 +167,8 @@ airbnb.sendReview({
     recommend: true
 })
 // returns confirmation
-
+```
+```
 airbnb.sendSpecialOffer({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     check_in: "2018-10-13T00:00:00+00:00",
@@ -156,8 +180,4 @@ airbnb.sendSpecialOffer({
     currency: 'USD'
 })
 // returns confirmation
-
-
-
-
 ```
