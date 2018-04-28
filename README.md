@@ -1,19 +1,28 @@
 
-# Unofficial airbnb.com API wrapper for node.js
+# Unofficial airbnb.com rest API wrapper for node.js
 ---
 ![](http://eloisecleans.com/blog/wp-content/uploads/2018/02/airbnb-logo-png-logo-black-transparent-airbnb-329-300x300.png)
 ![](https://cdn2.iconfinder.com/data/icons/nodejs-1/256/nodejs-256.png)
 
-*This library is not associated with airbnb.com and should only be used for non-profit and educational reasons.  Please, don't be a d&#42;ck. (you'll get rate limited or banned automatically, anyhoo).*
+*This library is not associated with airbnb.com and should only be used for non-profit and educational reasons.*
 
-The project will never have complete coverage of endpoints, but I will do my best to cover as many as I can find over the rest of the year.  Please request endpoints as repo issues.  Collaborators wanted!
+This is a pre 1.0 library.  Please request endpoints and functionality as repo issues.  Collaborators wanted!  
 
 ### Essential Info
 - All functions return promises  
 - Batch functions are limited to 50 elements at a time
 - You will need to supply a token for every logged in call (You may be asking, why not "initialize and forget"? Answer: I needed a stateless pattern for my project)
-- Error reporting and data validation is less than ideal. Help needed to refactor!
+- Error reporting and data validation is weak at this stage!
 
+# Reference
+## Contents
+1. Authorization
+1. Users
+1. Calendars
+1. Listings
+1. Threads
+1. Reservations
+1. Posting
 #### AUTH
 
 > Test a token
@@ -35,6 +44,7 @@ airbnb.newAccessToken({username:'foo@bar.com', password:'hunter2'})
 airbnb.login({username:'foo@bar.com', password:'hunter2'})
 // returns a user info object (includes token) or {error: {error obj}}
 ```
+TODO: support other login methods
 
 ### USERS
 > Get a user's public facing information
@@ -51,7 +61,7 @@ airbnb.getOwnUserInfo(token)
 ```
 
 ### CALENDAR
-> Public availability and price data on a listing.  The count variable is the duration in months.
+> Public availability and price data on a listing.  `count` is the duration in months.
 ```javascript
 airbnb.getPublicListingCalendar({
     id: 109834757,
@@ -150,7 +160,7 @@ airbnb.getThreads({
 ```
 
 <!-- -->
-> This is the best way to pull thread data. Returns an array of full thread data, ordered by latest update.  The offset is how many to skip, and the limit is how many to report.
+> This is the best way to pull thread data. Returns an array of full thread data, ordered by latest update.  The `offset` is how many to skip, and the `limit` is how many to report.
 ```javascript
 airbnb.getThreadsFull({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
@@ -227,7 +237,7 @@ airbnb.sendPreApproval({
 ```
 
 <!-- -->
-> Send a review to a guest after they have checked out. (id is the thread id)
+> Send a review to a guest after they have checked out. (`id` is the thread id)
 ```javascript
 airbnb.sendReview({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
