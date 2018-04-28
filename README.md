@@ -23,7 +23,8 @@ This is a pre 1.0 library.  Please request endpoints and functionality as repo i
 1. Threads
 1. Reservations
 1. Posting
-#### AUTH
+
+#### 1. AUTHORIZATION
 
 > Test a token
 ```javascript
@@ -46,7 +47,7 @@ airbnb.login({username:'foo@bar.com', password:'hunter2'})
 ```
 TODO: support other login methods
 
-### USERS
+#### 2. USERS
 > Get a user's public facing information
 ```javascript
 airbnb.getGuestInfo(2348485493)
@@ -60,7 +61,7 @@ airbnb.getOwnUserInfo(token)
 // returns private info about user (JSON)
 ```
 
-### CALENDAR
+#### 3. CALENDARS
 > Public availability and price data on a listing.  `count` is the duration in months.
 ```javascript
 airbnb.getPublicListingCalendar({
@@ -108,7 +109,7 @@ airbnb.setAvailabilityForDay({
 // returns a result of the operation
 ```
 
-### LISTING
+#### 4. LISTINGS
 > Airbnb's mighty search bar in JSON form.  More options coming soon.
 ```javascript
 airbnb.listingSearch({
@@ -138,7 +139,7 @@ airbnb.getListingInfoHost({
 // returns extended listing info for your listing (JSON)
 ```
 
-### THREADS
+### 5. THREADS
 > Returns a conversation with a guest or host.  This is a legacy endpoint which is somewhat limited in the content (only basic messages are reported in the 'posts' array)
 ```javascript
 airbnb.getThread({
@@ -180,7 +181,7 @@ airbnb.getThreadsBatch({
 // returns an array of threads in the new format (JSON)
 ```
 
-### RESERVATIONS
+#### 6. RESERVATIONS
 <!-- -->
 > Reservation data for one reservation.
 ```javascript
@@ -211,7 +212,7 @@ airbnb.getReservationsBatch({
 })
 // returns an array of reservations in the new format (JSON)
 ```
-### POSTING
+#### 7. POSTING
 
 <!-- -->
 > Send a message to a thread.
