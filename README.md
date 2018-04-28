@@ -1,5 +1,6 @@
 
 # *Unofficial* __airbnb.com__ REST API wrapper for node.js
+
 ![](http://eloisecleans.com/blog/wp-content/uploads/2018/02/airbnb-logo-png-logo-black-transparent-airbnb-329-300x300.png)
 ![](https://cdn2.iconfinder.com/data/icons/nodejs-1/256/nodejs-256.png)
 
@@ -8,12 +9,14 @@ Hi there!
 *Disclaimer: this library is not associated with airbnb.com and should only be used for non-profit and educational reasons.*  
 This is a pre 1.0 library.  Please request endpoints and functionality as repo issues.  Collaborators wanted!
 # Essential Info
+
 - All functions return __promises__  
 - Batch functions are limited to 50 elements at a time
 - You will need to supply a token for every logged in call
 - Error reporting and data validation is weak at this stage!
 
 # Reference
+
 ## Contents
 1. Authorization
 1. Users
@@ -26,25 +29,31 @@ This is a pre 1.0 library.  Please request endpoints and functionality as repo i
 ## 1. AUTHORIZATION
 
 ### testAuth
+
 Test a token
 ```javascript
 airbnb.testAuth('faketoken3sDdfvtF9if5398j0v5nui')
 // returns bool
 ```
 ### newAccessToken
+
 Request a new token
 ```javascript
 airbnb.newAccessToken({username:'foo@bar.com', password:'hunter2'})
 // returns {token: 'faketoken3sDdfvtF9if5398j0v5nui'} or {error: {error obj}}
 ```
 ### login
+
 Request a new token (v2 endpoint).  Similar to the above function but returns a user info summary with much more information.
 ```javascript
 airbnb.login({username:'foo@bar.com', password:'hunter2'})
 // returns a user info object (includes token) or {error: {error obj}}
 ```
 TODO: support other login methods
+---
+
 ## 2. USERS
+
 ### getGuestInfo
 Get a user's public facing information
 ```javascript
@@ -57,7 +66,10 @@ Obtain user data for the logged in account
 airbnb.getOwnUserInfo(token)
 // returns private info about user (JSON)
 ```
+---
+
 ## 3. CALENDARS
+
 ### getPublicListingCalendar
 Public availability and price data on a listing.  `count` is the duration in months.
 ```javascript
@@ -102,7 +114,10 @@ airbnb.setAvailabilityForDay({
 })
 // returns a result of the operation
 ```
+---
+
 ## 4. LISTINGS
+
 ### listingSearch
 Airbnb's mighty search bar in JSON form.  More options coming soon.
 ```javascript
@@ -130,7 +145,10 @@ airbnb.getListingInfoHost({
 })
 // returns extended listing info for your listing (JSON)
 ```
+---
+
 ## 5. THREADS
+
 ### getThread
 Returns a conversation with a guest or host.  This is a legacy endpoint which is somewhat limited in the content (only basic messages are reported in the 'posts' array)
 ```javascript
@@ -171,8 +189,10 @@ airbnb.getThreadsBatch({
 })
 // returns an array of threads in the new format (JSON)
 ```
+---
 
 ## 6. RESERVATIONS
+
 ### getReservation
 Reservation data for one reservation.
 ```javascript
@@ -203,7 +223,10 @@ airbnb.getReservationsBatch({
 })
 // returns an array of reservations in the new format (JSON)
 ```
+---
+
 ## 7. POSTING
+
 ### sendMessage
 Send a message to a thread.
 ```javascript
