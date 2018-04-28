@@ -5,6 +5,7 @@
 ![](https://cdn2.iconfinder.com/data/icons/nodejs-1/256/nodejs-256.png)
 
 ---
+
 Hi there!  
 *Disclaimer: this library is not associated with airbnb.com and should only be used for non-profit and educational reasons.*  
 This is a pre 1.0 library.  Please request endpoints and functionality as repo issues.  Collaborators wanted!
@@ -25,7 +26,9 @@ This is a pre 1.0 library.  Please request endpoints and functionality as repo i
 1. Threads
 1. Reservations
 1. Posting
+
 ---
+
 ## 1. AUTHORIZATION
 
 ### testAuth
@@ -50,6 +53,7 @@ airbnb.login({username:'foo@bar.com', password:'hunter2'})
 // returns a user info object (includes token) or {error: {error obj}}
 ```
 TODO: support other login methods
+
 ---
 
 ## 2. USERS
@@ -66,6 +70,7 @@ Obtain user data for the logged in account
 airbnb.getOwnUserInfo(token)
 // returns private info about user (JSON)
 ```
+
 ---
 
 ## 3. CALENDARS
@@ -114,6 +119,7 @@ airbnb.setAvailabilityForDay({
 })
 // returns a result of the operation
 ```
+
 ---
 
 ## 4. LISTINGS
@@ -145,6 +151,7 @@ airbnb.getListingInfoHost({
 })
 // returns extended listing info for your listing (JSON)
 ```
+
 ---
 
 ## 5. THREADS
@@ -189,6 +196,7 @@ airbnb.getThreadsBatch({
 })
 // returns an array of threads in the new format (JSON)
 ```
+
 ---
 
 ## 6. RESERVATIONS
@@ -223,6 +231,7 @@ airbnb.getReservationsBatch({
 })
 // returns an array of reservations in the new format (JSON)
 ```
+
 ---
 
 ## 7. POSTING
