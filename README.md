@@ -12,9 +12,9 @@ This is a pre 1.0 library.  Please request endpoints and functionality as repo i
 # Essential Info
 
 - All functions return __promises__  
-- Batch functions are limited to 50 elements at a time
-- You will need to supply a token for every logged in call
-- Error reporting and data validation is weak at this stage!
+- Batch functions are limited to 50 operations at a time
+- You will need to supply a token for every logged in function call
+- Error reporting and data validation is spotty at this stage!
 
 # Reference
 
