@@ -1,7 +1,7 @@
 {
     "name": "dcukkdikvv",
     "version": "0.5.3",
-    "description": "ceadknsfoi",
+    "description": "Unofficial airbnb.com REST API wrapper for node.js",
     "main": "index.js",
     "directories": {
         "lib": "lib"
@@ -15,8 +15,8 @@
         "type": "git",
         "url": "git+https://github.com/zxol/airbnbapi.git"
     },
-    "author": "OnePointNever",
-    "license": "UNLICENSED",
+    "author": "zxol",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/zxol/airbnbapi/issues"
     },

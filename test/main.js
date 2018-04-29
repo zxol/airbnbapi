@@ -8,7 +8,7 @@ let {assert, should, expect} = chai
 
 const apiBaseUrl = 'https://api.airbnb.com'
 
-const allBut = str =>  new Regexp('^(?!.*'+str+')')
+const allBut = str =>  new RegExp('^(?!.*'+str+')')
 
 describe('airbnbapi', () => {
     describe('#makeAuthHeader(token)', () => {
@@ -60,26 +60,6 @@ describe('airbnbapi', () => {
 
     describe('#newAccessToken({username, password})', () => {
         // Mock endpoint: invalid info
-        nock(apiBaseUrl)
-        .persist()
-        .post('/v1/authorize', {
-            grant_type: 'password',
-            username: 'mockuser',
-            password: 'mockpass'
-        })
-        .query(true)
-        .reply(400, {"error": " mock invalid"})
-
-        // Mock endpoint: valid info 'mockuser'. 'mockpass'
-        nock(apiBaseUrl)
-        .post('/v1/authorize', {
-            grant_type: 'password',
-            username: 'mockuser',
-            password: 'mockpass'
-        })
-        .query(true)
-        .reply(200, {token:'mocktoken'})
-
         it('should return null if no input present', async () => {
             expect(await abba.newAccessToken()).to.be.null
         })
@@ -89,11 +69,31 @@ describe('airbnbapi', () => {
         it('should return null if password is not present', async () => {
             expect(await abba.newAccessToken({username: 'asdf'})).to.be.null
         })
-        it('should return null if login details are incorrect', async () => {
-            expect(await abba.newAccessToken({username: 'asdf', password: 'bbb'})).to.be.null
+
+        nock(apiBaseUrl)
+        .post('/v1/authorize', {
+            grant_type: 'password',
+            username: 'wrong',
+            password: 'wrong'
         })
-        it('should return the token if the login details are correct', async () => {
-            expect(await abba.newAccessToken({username: 'mockuser', password: 'mockpass' })).to.be.a('string')
+        .query(true)
+        .reply(400, {"error": "mock invalid username or password"})
+
+        it('should return error object if login details are incorrect', async () => {
+            expect(await abba.newAccessToken({username: 'wrong', password: 'wrong'})).to.have.property('error')
+        })
+        // Mock endpoint: valid info 'mockuser'. 'mockpass'
+        nock(apiBaseUrl)
+        .post('/v1/authorize', {
+            grant_type: 'password',
+            username: 'mockuser',
+            password: 'mockpass'
+        })
+        .query(true)
+        .reply(200, {access_token:'mocktoken'})
+
+        it('should return a token obejct if the login details are correct', async () => {
+            expect(await abba.newAccessToken({username: 'mockuser', password: 'mockpass' })).to.have.property('token')
         })
     })
 
