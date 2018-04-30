@@ -31,14 +31,21 @@ describe('airbnbapi', () => {
     })
 
     describe('#testAuth(token)', () => {
+        it('should return null if a token is not present', async () => {
+            expect(await abba.testAuth()).to.be.null
+        })
 
         // Mock endpoint: invalid token
         nock(apiBaseUrl)
-        .persist()
         .matchHeader('X-Airbnb-OAuth-Token', allBut('mockcorrecttoken')) //anything but regex
         .post('/v2/batch', {operations:[]})
         .query(true)
-        .reply(400, {"error": " mock unauthorized"})
+        .reply(400)
+
+        it('should return false for incorrect token', async () => {
+            // console.log(await abba.testAuth('z'))
+            expect(await abba.testAuth('z')).to.be.false
+        })
 
         // Mock endpoint: valid token 'mockcorrecttoken'
         nock(apiBaseUrl)
@@ -46,13 +53,6 @@ describe('airbnbapi', () => {
         .post('/v2/batch', {operations: []} )
         .query(true)
         .reply(200, {operations:[]})
-
-        it('should return null if a token is not present', async () => {
-            expect(await abba.testAuth()).to.be.null
-        })
-        it('should return false for incorrect token', async () => {
-            expect(await abba.testAuth('z')).to.be.false
-        })
         it('should return true for correct token', async () => {
             expect(await abba.testAuth('mockcorrecttoken')).to.be.true
         })
@@ -102,13 +102,38 @@ describe('airbnbapi', () => {
             expect(await abba.getCalendar()).to.be.null
         })
         it('should return null if token, id, startDate or endDate is not present', async () => {
-            expect(await abba.getCalendar({id:process.env.TEST_HOST_LISTING_ID, startDate:'2017/11/01', endDate:'2017/12/01'})).to.be.null
-            expect(await abba.getCalendar({token: process.env.TEST_HOST_TOKEN, startDate:'2017/11/01', endDate:'2017/12/01'})).to.be.null
-            expect(await abba.getCalendar({token: process.env.TEST_HOST_TOKEN, id:process.env.TEST_HOST_LISTING_ID, endDate:'2017/12/01'})).to.be.null
-            expect(await abba.getCalendar({token: process.env.TEST_HOST_TOKEN, id:process.env.TEST_HOST_LISTING_ID, startDate:'2017/11/01'})).to.be.null
+            expect(await abba.getCalendar({id:1234, startDate:'2017/11/01', endDate:'2017/12/01'})).to.be.null
+            expect(await abba.getCalendar({token: 'mocktoken', startDate:'2017/11/01', endDate:'2017/12/01'})).to.be.null
+            expect(await abba.getCalendar({token: 'mocktoken', id:1234, endDate:'2017/12/01'})).to.be.null
+            expect(await abba.getCalendar({token: 'mocktoken', id:1234, startDate:'2017/11/01'})).to.be.null
         })
+
+        nock(apiBaseUrl)
+        .matchHeader('X-Airbnb-OAuth-Token', 'mockcorrecttoken')
+        .post('/v2/batch', {
+           operations: [
+                {
+                    method: 'GET',
+                    path: '/calendar_days',
+                    query: {
+                        start_date: '2017-11-01',
+                        listing_id: 1234,
+                        _format: 'host_calendar',
+                        end_date: '2017-12-01'
+                    }
+                },
+                {
+                    method: 'GET',
+                    path: '/dynamic_pricing_controls/1234/'
+                }
+           ],
+           _transaction: false
+        })
+        .query(true)
+        .reply(200, {operations: {mockCalenderArray: []}})
+
         it('should return type object', async () => {
-            expect(await abba.getCalendar({token: process.env.TEST_HOST_TOKEN, id:process.env.TEST_HOST_LISTING_ID, startDate:'2017-11-01', endDate:'2017-12-01'})).to.be.an('object')
+            expect(await abba.getCalendar({token: 'mockcorrecttoken', id:1234, startDate:'2017-11-01', endDate:'2017-12-01'})).to.be.an('object')
         })
     })
 })
