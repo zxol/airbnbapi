@@ -14,7 +14,7 @@ const nockauthl = _ => nockauth().log(console.log)
 describe('airbnbapi', () => {
     describe('#makeAuthHeader(token)', () => {
 
-        it('should return null if a token is not present', () => {
+        it('should return null if a token is not passed', () => {
             expect(abba.makeAuthHeader()).to.be.null
         })
         it('should return type object', () => {
@@ -32,7 +32,7 @@ describe('airbnbapi', () => {
     })
 
     describe('#testAuth(token)', () => {
-        it('should return null if a token is not present', async () => {
+        it('should return null if a token is not passed', async () => {
             expect(await abba.testAuth()).to.be.null
         })
 
@@ -60,13 +60,9 @@ describe('airbnbapi', () => {
 
     describe('#newAccessToken({username, password})', () => {
         // Mock endpoint: invalid info
-        it('should return null if no input present', async () => {
+        it('should return null if no arguments are passed or arguments are missing', async () => {
             expect(await abba.newAccessToken()).to.be.null
-        })
-        it('should return null if username is not present', async () => {
             expect(await abba.newAccessToken({password: 'asdf'})).to.be.null
-        })
-        it('should return null if password is not present', async () => {
             expect(await abba.newAccessToken({username: 'asdf'})).to.be.null
         })
 
@@ -98,15 +94,12 @@ describe('airbnbapi', () => {
     })
 
     describe('#login({email, password})', () => {
+        const testFunc = abba.login.bind(abba)
         // Mock endpoint: invalid info
-        it('should return null if no input present', async () => {
-            expect(await abba.login()).to.be.null
-        })
-        it('should return null if email is not present', async () => {
-            expect(await abba.login({password: 'asdf'})).to.be.null
-        })
-        it('should return null if password is not present', async () => {
-            expect(await abba.login({email: 'asdf'})).to.be.null
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({password: 'asdf'})).to.be.null
+            expect(await testFunc({email: 'asdf'})).to.be.null
         })
 
         nock(apiBaseUrl)
@@ -118,7 +111,7 @@ describe('airbnbapi', () => {
         .reply(400, {"error": "mock invalid username or password"})
 
         it('should return error object if login details are incorrect', async () => {
-            expect(await abba.login({email: 'wrong', password: 'wrong'})).to.have.property('error')
+            expect(await testFunc({email: 'wrong', password: 'wrong'})).to.have.property('error')
         })
 
         // Mock endpoint: valid info 'mockuser'. 'mockpass'
@@ -131,16 +124,14 @@ describe('airbnbapi', () => {
         .reply(200, { login:{id:'mocktoken'}})
 
         it('should return a summary object if the login details are correct', async () => {
-            expect(await abba.login({email: 'mockuser', password: 'mockpass' })).to.have.property('login')
+            expect(await testFunc({email: 'mockuser', password: 'mockpass' })).to.have.property('login')
         })
     })
 
     describe('#getPublicListingCalendar({id, month, year, count})', () => {
         const testFunc = abba.getPublicListingCalendar.bind(abba)
-        it('should return null if no input present', async () => {
+        it('should return null if no arguments are passed or arguments are missing', async () => {
             expect(await testFunc()).to.be.null
-        })
-        it('should return null if id is not present', async () => {
             expect(await testFunc({month: '1', year: '2018', count: '1' })).to.be.null
         })
         nock(apiBaseUrl)
@@ -160,14 +151,13 @@ describe('airbnbapi', () => {
     })
 
     describe('#getCalendar({token, id, startDate, endDate})', () => {
-        it('should return null if no input present', async () => {
-            expect(await abba.getCalendar()).to.be.null
-        })
-        it('should return null if token, id, startDate or endDate is not present', async () => {
-            expect(await abba.getCalendar({id:1234, startDate:'2017/11/01', endDate:'2017/12/01'})).to.be.null
-            expect(await abba.getCalendar({token: 'mocktoken', startDate:'2017/11/01', endDate:'2017/12/01'})).to.be.null
-            expect(await abba.getCalendar({token: 'mocktoken', id:1234, endDate:'2017/12/01'})).to.be.null
-            expect(await abba.getCalendar({token: 'mocktoken', id:1234, startDate:'2017/11/01'})).to.be.null
+        const testFunc = abba.getCalendar.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({id:1234, startDate:'2017/11/01', endDate:'2017/12/01'})).to.be.null
+            expect(await testFunc({token: 'mocktoken', startDate:'2017/11/01', endDate:'2017/12/01'})).to.be.null
+            expect(await testFunc({token: 'mocktoken', id:1234, endDate:'2017/12/01'})).to.be.null
+            expect(await testFunc({token: 'mocktoken', id:1234, startDate:'2017/11/01'})).to.be.null
         })
         nockauth()
         .post('/v2/batch', {
@@ -192,8 +182,8 @@ describe('airbnbapi', () => {
         })
         .query(true)
         .reply(200, {operations: [ {response: {calendar_days: []}}]})
-        it('should return type object', async () => {
-            expect(await abba.getCalendar({token: 'mockcorrecttoken', id:1234, startDate:'2017-11-01', endDate:'2017-12-01'})).to.be.an('array')
+        it('should return a array of calendar days if arguments are correct', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', id:1234, startDate:'2017-11-01', endDate:'2017-12-01'})).to.be.an('array')
         })
     })
 
@@ -227,10 +217,8 @@ describe('airbnbapi', () => {
 
     describe('#setHouseManual({token, id, manual})', () => {
         const testFunc = abba.setHouseManual.bind(abba)
-        it('should return null if no input present', async () => {
+        it('should return null if no arguments are passed or arguments are missing', async () => {
             expect(await testFunc()).to.be.null
-        })
-        it('should return null if token, id, or manual is not present', async () => {
             expect(await testFunc({id:1234, manual:'manual'})).to.be.null
             expect(await testFunc({token: 'mocktoken', manual:'manual'})).to.be.null
             expect(await testFunc({token: 'mocktoken', id:1234})).to.be.null
@@ -248,10 +236,8 @@ describe('airbnbapi', () => {
 
     describe('#getListingInfo({id})', () => {
         const testFunc = abba.getListingInfo.bind(abba)
-        it('should return null if no input present', async () => {
+        it('should return null if no arguments are passed or arguments are missing', async () => {
             expect(await testFunc()).to.be.null
-        })
-        it('should return null if id is not present', async () => {
             expect(await testFunc({not_id:1234})).to.be.null
         })
         nock(apiBaseUrl)
@@ -266,13 +252,9 @@ describe('airbnbapi', () => {
 
     describe('#getListingInfoHost({token, id})', () => {
         const testFunc = abba.getListingInfoHost.bind(abba)
-        it('should return null if no input present', async () => {
+        it('should return null if no arguments are passed or arguments are missing', async () => {
             expect(await testFunc()).to.be.null
-        })
-        it('should return null if token is not present', async () => {
             expect(await testFunc({id: 1234})).to.be.null
-        })
-        it('should return null if id is not present', async () => {
             expect(await testFunc({token: 'mockcorrecttoken'})).to.be.null
         })
         nockauth()
@@ -285,4 +267,73 @@ describe('airbnbapi', () => {
         })
     })
 
+    describe('#getThread({token, id, currency})', () => {
+        const testFunc = abba.getThread.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({token:'mockcorrecttoken'})).to.be.null
+            expect(await testFunc({id:1234})).to.be.null
+        })
+        nockauth()
+        .get('/v1/threads/1234')
+        .query(true)
+        .reply(200, {thread:{id: 1234}})
+
+        it('should return a thread object if arguments are correct', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', id: 1234})).to.have.property('id')
+        })
+    })
+
+    describe('#getThreadsBatch({ token, ids, currency})', () => {
+        const testFunc = abba.getThreadsBatch.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+        })
+        it('should return null if token or ids is not passed', async () => {
+            expect(await testFunc({id:1234})).to.be.null
+            expect(await testFunc({token: 'mocktoken'})).to.be.null
+        })
+        nockauth()
+        .post('/v2/batch', {
+           operations: [
+                {
+                    method: 'GET',
+                    path: '/threads/987',
+                    query: {
+                        _format: 'for_messaging_sync_with_posts'
+                    }
+                },
+                {
+                    method: 'GET',
+                    path: '/threads/876',
+                    query: {
+                        _format: 'for_messaging_sync_with_posts'
+                    }
+                },
+           ],
+           _transaction: false
+        })
+        .query(true)
+        .reply(200, {operations: [{id: 987}, {id: 876}]})
+        it('should return type array if arguments are correct', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', ids:[987,876]})).to.be.an('array')
+        })
+    })
+
+    describe('#getThreadsFull({token, offset, limit})', () => {
+        const testFunc = abba.getThreadsFull.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({offset:2})).to.be.null
+            expect(await testFunc({offset:2, limit:0})).to.be.null
+        })
+        nockauthl()
+        .get('/v2/threads')
+        .query(q => q._format === 'for_messaging_sync')
+        .reply(200, {threads:[{id: 1234},{id: 2345},{id: 3456},{id: 5687},{id: 6789}]})
+
+        it('should return a thread object if arguments are correct', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', offset:0, limit:10})).to.be.an('array')
+        })
+    })
 })
