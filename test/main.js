@@ -327,12 +327,12 @@ describe('airbnbapi', () => {
             expect(await testFunc({offset:2})).to.be.null
             expect(await testFunc({offset:2, limit:0})).to.be.null
         })
-        nockauthl()
+        nockauth()
         .get('/v2/threads')
         .query(q => q._format === 'for_messaging_sync')
         .reply(200, {threads:[{id: 1234},{id: 2345},{id: 3456},{id: 5687},{id: 6789}]})
 
-        it('should return a thread object if arguments are correct', async () => {
+        it('should return a list(array) of threads if arguments are correct', async () => {
             expect(await testFunc({token: 'mockcorrecttoken', offset:0, limit:10})).to.be.an('array')
         })
     })
