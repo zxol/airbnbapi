@@ -13,9 +13,8 @@ const nockauthl = _ => nockauth().log(console.log)
 
 describe('airbnbapi', () => {
     describe('#makeAuthHeader(token)', () => {
-
         it('should return null if a token is not passed', () => {
-            expect(abba.makeAuthHeader()).to.be.null
+            expect(abba.makeAuthHeader()).to.be.undefined
         })
         it('should return type object', () => {
             expect(abba.makeAuthHeader('z')).to.be.an('object')
@@ -25,9 +24,6 @@ describe('airbnbapi', () => {
         })
         it('return object should have property [X-Airbnb-OAuth-Token]', () => {
             expect(abba.makeAuthHeader('z')).to.have.property('X-Airbnb-OAuth-Token')
-        })
-        it('return object should have property [User-Agent]', () => {
-            expect(abba.makeAuthHeader('z')).to.have.property('User-Agent')
         })
     })
 
@@ -137,6 +133,8 @@ describe('airbnbapi', () => {
         nock(apiBaseUrl)
         .get('/v2/calendar_months')
         .query({
+            currency: "JPY",
+            key: "d306zoyjsyarp7ifhu67rjxn52tv0t20",
             listing_id: "1234",
             month: "1",
             year: "2018",
@@ -160,28 +158,16 @@ describe('airbnbapi', () => {
             expect(await testFunc({token: 'mocktoken', id:1234, startDate:'2017/11/01'})).to.be.null
         })
         nockauth()
-        .post('/v2/batch', {
-           operations: [
-                {
-                    method: 'GET',
-                    path: '/calendar_days',
-                    query: {
-                        start_date: '2017-11-01',
-                        listing_id: 1234,
-                        _format: 'host_calendar',
-                        end_date: '2017-12-01'
-                    }
-                },
-                {
-                    method: 'GET',
-                    path: '/dynamic_pricing_controls/1234',
-                    query: {}
-                }
-           ],
-           _transaction: false
+        .get('/v2/calendar_days')
+        .query({
+            currency: "JPY",
+            key: "d306zoyjsyarp7ifhu67rjxn52tv0t20",
+            start_date: '2017-11-01',
+            listing_id: 1234,
+            _format: 'host_calendar',
+            end_date: '2017-12-01'
         })
-        .query(true)
-        .reply(200, {operations: [ {response: {calendar_days: []}}]})
+        .reply(200, {calendar_days: []})
         it('should return a array of calendar days if arguments are correct', async () => {
             expect(await testFunc({token: 'mockcorrecttoken', id:1234, startDate:'2017-11-01', endDate:'2017-12-01'})).to.be.an('array')
         })
@@ -336,4 +322,120 @@ describe('airbnbapi', () => {
             expect(await testFunc({token: 'mockcorrecttoken', offset:0, limit:10})).to.be.an('array')
         })
     })
+
+    describe('#getThreads({token, offset, limit})', () => {
+        const testFunc = abba.getThreads.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({offset:2})).to.be.null
+            expect(await testFunc({offset:2, limit:0})).to.be.null
+        })
+        nockauth()
+        .get('/v2/threads')
+        .query(true)
+        .reply(200, {threads:[{id: 1234},{id: 2345},{id: 3456},{id: 5687},{id: 6789}]})
+
+        it('should return a list(array) of threads if arguments are correct', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', offset:0, limit:10})).to.be.an('array')
+        })
+    })
+
+    describe('#createThread({token, id, checkin, checkout, guestNum, message })', () => {
+        const testFunc = abba.createThread.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({id:1234, checkIn:'2017-01-01', checkOut:'2017-01-02', message:'asd'})).to.be.null
+            expect(await testFunc({token: 'mocktoken', checkIn:'2017-01-01', checkOut:'2017-01-02', message:'asd'})).to.be.null
+            expect(await testFunc({token: 'mocktoken', id:1234, checkOut:'2017-01-02', message:'asd'})).to.be.null
+            expect(await testFunc({token: 'mocktoken', id:1234, checkIn:'2017-01-01', message:'asd'})).to.be.null
+            expect(await testFunc({token: 'mocktoken', id:1234, checkIn:'2017-01-01', checkOut:'2017-01-02'})).to.be.null
+        })
+        nockauth()
+        .post('/v1/threads/create', {
+            listing_id:1234,
+            number_of_guests:1,
+            message:'hello!',
+            checkin_date:'2017-01-01',
+            checkout_date:'2017-01-02',
+        })
+        .query(true)
+        .reply(200, {response:'ok'})
+        it('should return response object', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', id:1234, checkIn:'2017-01-01', checkOut:'2017-01-02', message:'hello!'})).to.be.an('object')
+        })
+    })
+
+    describe('getReservations({token, offset, limit}', () => {
+        const testFunc = abba.getReservations.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({offset:2})).to.be.null
+            expect(await testFunc({offset:2, limit:0})).to.be.null
+        })
+        nockauth()
+        .get('/v2/reservations')
+        .query(q => q._format === 'for_mobile_host')
+        .reply(200, {reservations:[{id: 1234},{id: 2345},{id: 3456},{id: 5687},{id: 6789}]})
+
+        it('should return a list(array) of threads if arguments are correct', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', offset:0, limit:10})).to.be.an('array')
+        })
+    })
+
+    describe('#getReservationsBatch({ token, ids, currency})', () => {
+        const testFunc = abba.getThreadsBatch.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+        })
+        it('should return null if token or ids is not passed', async () => {
+            expect(await testFunc({id:1234})).to.be.null
+            expect(await testFunc({token: 'mocktoken'})).to.be.null
+        })
+        nockauth()
+        .post('/v2/batch', {
+           operations: [
+                {
+                    method: 'GET',
+                    path: '/threads/987',
+                    query: {
+                        _format: 'for_messaging_sync_with_posts'
+                    }
+                },
+                {
+                    method: 'GET',
+                    path: '/threads/876',
+                    query: {
+                        _format: 'for_messaging_sync_with_posts'
+                    }
+                },
+           ],
+           _transaction: false
+        })
+        .query(true)
+        .reply(200, {operations: [{id: 987}, {id: 876}]})
+        it('should return type array if arguments are correct', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', ids:[987,876]})).to.be.an('array')
+        })
+    })
+
+    describe('#getReservation({token, id, currency})', () => {
+        const testFunc = abba.getReservation.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({token:'mockcorrecttoken'})).to.be.null
+            expect(await testFunc({id:1234})).to.be.null
+        })
+        nockauth()
+        .get('/v2/reservations/1234')
+        .query(true)
+        .reply(200, {reservation:{id: 1234}})
+
+        it('should return a reservation object if arguments are correct', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', id: 1234})).to.have.property('id')
+        })
+    })
+
+
+
+
 })

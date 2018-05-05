@@ -7,7 +7,7 @@
         "lib": "lib"
     },
     "scripts": {
-        "build": "babel lib/main.js --out-file index.js",
+        "build": "npm run prettier && babel lib/main.js --out-file index.js",
         "test": "npm run build && mocha",
         "prettier": "prettier --write \"lib/**/*.js\""
     },
