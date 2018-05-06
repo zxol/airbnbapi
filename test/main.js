@@ -340,7 +340,7 @@ describe('airbnbapi', () => {
         })
     })
 
-    describe('#createThread({token, id, checkin, checkout, guestNum, message })', () => {
+    describe('#createThread({token, id, checkin, checkout, guestNum, message})', () => {
         const testFunc = abba.createThread.bind(abba)
         it('should return null if no arguments are passed or arguments are missing', async () => {
             expect(await testFunc()).to.be.null
@@ -435,6 +435,145 @@ describe('airbnbapi', () => {
         })
     })
 
+    describe('#sendMessage({ token, id, message })', () => {
+        const testFunc = abba.sendMessage.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({id:1234, message:'hello'})).to.be.null
+            expect(await testFunc({token: 'mocktoken', message:'hello'})).to.be.null
+            expect(await testFunc({token: 'mocktoken', id:1234})).to.be.null
+        })
+        nockauth()
+        .post('/v2/messages', {
+            thread_id:1234,
+            message:'hello!'
+        })
+        .query(true)
+        .reply(200, {response:'ok'})
+        it('should return response object', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', id:1234, message:'hello!'})).to.be.an('object')
+        })
+    })
+
+    describe('#sendPreApproval({token, thread_id, listing_id, message})', () => {
+        const testFunc = abba.sendPreApproval.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({thread_id:987, listing_id:1234})).to.be.null
+            expect(await testFunc({token: 'mocktoken', listing_id:1234})).to.be.null
+            expect(await testFunc({token: 'mocktoken', thread_id:987})).to.be.null
+        })
+        nockauth()
+        .post('/v1/threads/987/update', {
+            listing_id:1234,
+            message:'',
+            status:'preapproved'
+        })
+        .query(true)
+        .reply(200, {response:'ok'})
+        it('should return response object', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', listing_id:1234, thread_id:987})).to.be.an('object')
+        })
+    })
+
+    describe('#sendReview({token, id, comments, private_feedback, cleanliness, communication, respect_house_rules, recommend})', () => {
+        const testFunc = abba.sendReview.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({id:456})).to.be.null
+            expect(await testFunc({token: 'mocktoken'})).to.be.null
+        })
+        nockauth()
+        .post('/v1/reviews/456/update', {
+            comments: 'They were great guests!',
+            private_feedback: 'Thank you for staying!',
+            cleanliness: 5,
+            communication: 5,
+            respect_house_rules: 5,
+            recommend: true
+        })
+        .query(true)
+        .reply(200, {response:'ok'})
+        it('should return response object', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', id:456})).to.be.an('object')
+        })
+    })
+
+    describe('#sendSpecialOffer({token, startDate, guests, listingId, nights, price, threadId, currency})', () => {
+        const testFunc = abba.sendSpecialOffer.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            // expect(await testFunc({token:'mocktoken', startDate: '2017-01-01', guests:1, listingId:1234, nights:2, price:10000, threadId: 987})).to.be.null
+            expect(await testFunc({startDate: '2017-01-01', guests:1, listingId:1234, nights:2, price:10000, threadId: 987})).to.be.null
+            expect(await testFunc({token:'mocktoken', guests:1, listingId:1234, nights:2, price:10000, threadId: 987})).to.be.null
+            expect(await testFunc({token:'mocktoken', startDate: '2017-01-01', listingId:1234, nights:2, price:10000, threadId: 987})).to.be.null
+            expect(await testFunc({token:'mocktoken', startDate: '2017-01-01', guests:1, nights:2, price:10000, threadId: 987})).to.be.null
+            expect(await testFunc({token:'mocktoken', startDate: '2017-01-01', guests:1, listingId:1234, price:10000, threadId: 987})).to.be.null
+            expect(await testFunc({token:'mocktoken', startDate: '2017-01-01', guests:1, listingId:1234, nights:2, threadId: 987})).to.be.null
+            expect(await testFunc({token:'mocktoken', startDate: '2017-01-01', guests:1, listingId:1234, nights:2, price:10000})).to.be.null
+        })
+        nockauth()
+        .post('/v2/special_offers', {
+            check_in: '2017-01-01',
+            guests: 1,
+            listing_id: 1234,
+            nights: 2,
+            price: 10000,
+            thread_id: 987
+        })
+        .query(true)
+        .reply(200, {response:'ok'})
+        it('should return response object', async () => {
+            expect(await testFunc({token:'mockcorrecttoken', startDate: '2017-01-01', guests:1, listingId:1234, nights:2, price:10000, threadId: 987})).to.be.an('object')
+        })
+    })
+
+    describe('#getGuestInfo(id)', () => {
+        const testFunc = abba.getGuestInfo.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+        })
+        nock(apiBaseUrl)
+        .get('/v2/users/1234')
+        .query(true)
+        .reply(200, {user:{id:1234}})
+
+        it('should return a response object if arguments are correct', async () => {
+            expect(await testFunc(1234)).to.have.property('id')
+        })
+    })
+
+    describe('#getOwnUserInfo(token)', () => {
+        const testFunc = abba.getOwnUserInfo.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc('wrongtoken')).to.be.null
+        })
+        nockauth()
+        .get('/v2/users/me')
+        .query(true)
+        .reply(200, {user:{id:1234}})
+
+        it('should return a user info object if arguments are correct', async () => {
+            expect(await testFunc('mockcorrecttoken')).to.have.property('id')
+        })
+    })
+
+    describe('#listingSearch({location, offset, limit, language, currency})', () => {
+        const testFunc = abba.getOwnUserInfo.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc('wrongtoken')).to.be.null
+        })
+        nockauth()
+        .get('/v2/users/me')
+        .query(true)
+        .reply(200, {user:{id:1234}})
+
+        it('should return a unser info object if arguments are correct', async () => {
+            expect(await testFunc('mockcorrecttoken')).to.have.property('id')
+        })
+    })
 
 
 
