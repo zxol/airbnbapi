@@ -7,7 +7,7 @@
 
 ---
 
-Hi there!  
+Hi there! 👋  
 *Disclaimer: this library is not associated with airbnb.com and should only be used for non-profit and educational reasons.*  
 This is a pre 1.0 library.  Please request endpoints and functionality as repo issues.  Collaborators wanted!
 # Essential Info
@@ -17,7 +17,22 @@ This is a pre 1.0 library.  Please request endpoints and functionality as repo i
 - You will need to supply a token for every logged in function call
 - Error reporting and data validation is spotty at this stage!
 
-# Reference
+# Getting started 👨‍💻
+
+## Installing
+```
+npm install airbnbapijs
+```
+## Importing
+```
+var airbnb = require('airbnbapijs')
+```
+or es6...
+```
+import airbnb from 'airbnbapijs'
+```
+
+# Reference 📗
 
 ## Contents
 1. Authorization
@@ -30,7 +45,7 @@ This is a pre 1.0 library.  Please request endpoints and functionality as repo i
 
 ---
 
-## 1. AUTHORIZATION
+## 1. AUTHORIZATION 🔒
 
 ### testAuth
 
@@ -57,7 +72,7 @@ TODO: support other login methods
 
 ---
 
-## 2. USERS
+## 2. USERS 👤
 
 ### getGuestInfo
 Get a user's public facing information
@@ -74,7 +89,7 @@ airbnb.getOwnUserInfo(token)
 
 ---
 
-## 3. CALENDARS
+## 3. CALENDARS 📅
 
 ### getPublicListingCalendar
 Public availability and price data on a listing.  `count` is the duration in months.
@@ -123,7 +138,7 @@ airbnb.setAvailabilityForDay({
 
 ---
 
-## 4. LISTINGS
+## 4. LISTINGS 🏘️
 
 ### listingSearch
 Airbnb's mighty search bar in JSON form.  More options coming soon.
@@ -155,7 +170,7 @@ airbnb.getListingInfoHost({
 
 ---
 
-## 5. THREADS
+## 5. THREADS 💬
 
 ### getThread
 Returns a conversation with a guest or host.  This is a legacy endpoint which is somewhat limited in the content (only basic messages are reported in the 'posts' array)
@@ -200,7 +215,7 @@ airbnb.getThreadsBatch({
 
 ---
 
-## 6. RESERVATIONS
+## 6. RESERVATIONS 🔖
 
 ### getReservation
 Reservation data for one reservation.
@@ -235,7 +250,7 @@ airbnb.getReservationsBatch({
 
 ---
 
-## 7. POSTING
+## 7. POSTING 💌
 
 ### sendMessage
 Send a message to a thread.
