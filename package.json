@@ -1,13 +1,13 @@
 {
     "name": "dcukkdikvv",
     "version": "0.5.3",
-    "description": "ceadknsfoi",
+    "description": "Unofficial airbnb.com REST API wrapper for node.js",
     "main": "index.js",
     "directories": {
         "lib": "lib"
     },
     "scripts": {
-        "build": "babel lib/main.js --out-file index.js",
+        "build": "npm run prettier && babel lib/main.js --out-file index.js",
         "test": "npm run build && mocha",
         "prettier": "prettier --write \"lib/**/*.js\""
     },
@@ -15,8 +15,8 @@
         "type": "git",
         "url": "git+https://github.com/zxol/airbnbapi.git"
     },
-    "author": "OnePointNever",
-    "license": "UNLICENSED",
+    "author": "zxol",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/zxol/airbnbapi/issues"
     },
@@ -30,8 +30,12 @@
         "babel-plugin-transform-object-rest-spread": "^6.26.0",
         "babel-preset-env": "^1.6.1",
         "chai": "^4.1.2",
+        "coveralls": "^3.0.1",
         "dotenv": "^4.0.0",
+        "lodash": "^4.17.10",
         "mocha": "^4.0.1",
-        "nodemon": "^1.9.2"
+        "nock": "^9.2.5",
+        "nodemon": "^1.9.2",
+        "prettier": "^1.12.1"
     }
 }
