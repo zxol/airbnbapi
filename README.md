@@ -3,7 +3,7 @@
 
 ![](http://eloisecleans.com/blog/wp-content/uploads/2018/02/airbnb-logo-png-logo-black-transparent-airbnb-329-300x300.png)
 ![](https://cdn2.iconfinder.com/data/icons/nodejs-1/256/nodejs-256.png)  
-![](https://travis-ci.org/zxol/airbnbapi.svg?branch=nock)
+![](https://travis-ci.org/zxol/airbnbapi.svg?branch=master)
 
 ---
 
