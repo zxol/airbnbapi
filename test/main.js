@@ -270,7 +270,7 @@ describe('airbnbapi', () => {
         })
     })
 
-    describe('#getThreadsBatch({ token, ids, currency})', () => {
+    describe('#getThreadsBatch({token, ids, currency})', () => {
         const testFunc = abba.getThreadsBatch.bind(abba)
         it('should return null if no arguments are passed or arguments are missing', async () => {
             expect(await testFunc()).to.be.null
@@ -560,21 +560,16 @@ describe('airbnbapi', () => {
     })
 
     describe('#listingSearch({location, offset, limit, language, currency})', () => {
-        const testFunc = abba.getOwnUserInfo.bind(abba)
-        it('should return null if no arguments are passed or arguments are missing', async () => {
-            expect(await testFunc()).to.be.null
-            expect(await testFunc('wrongtoken')).to.be.null
-        })
-        nockauth()
-        .get('/v2/users/me')
-        .query(true)
-        .reply(200, {user:{id:1234}})
+        const testFunc = abba.listingSearch.bind(abba)
 
-        it('should return a unser info object if arguments are correct', async () => {
-            expect(await testFunc('mockcorrecttoken')).to.have.property('id')
+        it('should return a list of listings', async () => {
+            nock(apiBaseUrl)
+            .get('/v2/search_results')
+            .twice()
+            .query(true)
+            .reply(200, {search_results:[{id:123},{id:456},{id:789}], metadata:{foo:'bar'}})
+            expect(await testFunc()).to.have.property('search_results')
+            expect(await testFunc({location: 'New York, United States', offset: 0, limit: 50, language: 'en', currency: 'USD'})).to.have.property('search_results')
         })
     })
-
-
-
 })
