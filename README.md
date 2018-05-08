@@ -42,6 +42,7 @@ import airbnb from 'airbnbapijs'
 1. Threads
 1. Reservations
 1. Posting
+1. Configuration
 
 ---
 
@@ -302,4 +303,24 @@ airbnb.sendSpecialOffer({
     currency: 'USD'
 })
 // returns confirmation
+```
+
+## 8. CONFIGURATION ⚙️
+
+### setApiKey
+Use an api key different from the standard one
+```javascript
+airbnb.setApiKey('01123581321345589144233377610987')
+```
+
+### setCurrency
+Set the default [currency](https://www.iban.com/currency-codes.html) (the default is JPY, sorry USA)
+```javascript
+airbnb.setCurrency('USD')
+```
+
+### setUserAgent
+set the user agent string for the requests
+```javascript
+airbnb.setUserAgent('Mosaic/0.9')
 ```
