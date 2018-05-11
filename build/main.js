@@ -10,24 +10,15 @@ var _log = require('./log.js');
 
 var _log2 = _interopRequireDefault(_log);
 
+var _config = require('./config.js');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class AirApi {
     constructor() {
-        this.config = {
-            DOMAIN: 'https://api.airbnb.com',
-            API_KEY: 'd306zoyjsyarp7ifhu67rjxn52tv0t20',
-            DEFAULT_HEADER: {
-                // 'User-Agent': 'Mozillaz/5.0 (Windows NT 6.1)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
-                // 'User-Agent': 'TESTING API'
-                // 'User-Agent': randomUseragent.getRandom()
-            },
-            DEFAULT_PARAMETERS: {
-                key: 'd306zoyjsyarp7ifhu67rjxn52tv0t20',
-                currency: 'JPY'
-            }
-        };
+        this.config = Object.assign({}, _config2.default);
     }
 
     buildOptions({
@@ -45,11 +36,11 @@ class AirApi {
     }) {
         const out = {
             method,
-            uri: uri || this.config.DOMAIN + route,
+            uri: uri || this.config.domain + route,
             json,
-            headers: _extends({}, this.config.DEFAULT_HEADER, this.makeAuthHeader(token), headers),
+            headers: _extends({}, this.config.default_headers, this.makeAuthHeader(token), headers),
             qs: _extends({
-                key: this.config.API_KEY,
+                key: this.config.api_key,
                 currency,
                 _format: format
             }, qs),
@@ -57,6 +48,22 @@ class AirApi {
             timeout
             // console.log(JSON.stringify(out, null, 4))
         };return out;
+    }
+
+    //////////// CONFIG SECTION ////////////
+    //////////// CONFIG SECTION ////////////
+    //////////// CONFIG SECTION ////////////
+
+    setApiKey(key) {
+        this.config.api_key = key;
+    }
+
+    setCurrency(currencyString) {
+        this.config.currency = currencyString;
+    }
+
+    setUserAgent(userAgentString) {
+        this.config.default_headerss['User-Agent'] = userAgentString;
     }
 
     //////////// HEADER SECTION ////////////
@@ -240,13 +247,7 @@ class AirApi {
         }
     }
 
-    async setPriceForDay({
-        token,
-        id,
-        date,
-        price,
-        currency = this.config.DEFAULT_PARAMETERS.currency
-    }) {
+    async setPriceForDay({ token, id, date, price, currency = this.config.currency }) {
         // console.log(JSON.stringify(this, null, 4))
         const options = this.buildOptions({
             method: 'PUT',
@@ -366,7 +367,7 @@ class AirApi {
     //////////// THREADS SECTION ////////////
 
     // Gets all the data for one thread
-    async getThread({ token, id, currency = this.config.DEFAULT_PARAMETERS.currency } = {}) {
+    async getThread({ token, id, currency = this.config.currency } = {}) {
         if (!token) {
             _log2.default.e("Airbnbapi: Can't get a thread without a token");
             return null;
@@ -377,7 +378,7 @@ class AirApi {
         const options = this.buildOptions({
             route: '/v1/threads/' + id,
             token,
-            qs: _extends({}, this.config.DEFAULT_PARAMETERS, { currency })
+            qs: { currency }
         });
         try {
             const response = await (0, _requestPromise2.default)(options);
@@ -388,7 +389,7 @@ class AirApi {
         }
     }
 
-    async getThreadsBatch({ token, ids, currency = this.config.DEFAULT_PARAMETERS.currency } = {}) {
+    async getThreadsBatch({ token, ids, currency = this.config.currency } = {}) {
         //log.i(colors.magenta('Airbnbapi: Requesting calendar for [ ' + id + ' ] --'))
         if (!token) {
             _log2.default.e("Airbnbapi: Can't get threads without a token");
@@ -536,11 +537,7 @@ class AirApi {
         }
     }
 
-    async getReservationsBatch({
-        token,
-        ids,
-        currency = this.config.DEFAULT_PARAMETERS.currency
-    } = {}) {
+    async getReservationsBatch({ token, ids, currency = this.config.currency } = {}) {
         // TODO change to reservation
         //log.i(colors.magenta('Airbnbapi: Requesting calendar for [ ' + id + ' ] --'))
         if (!token) {
@@ -710,7 +707,7 @@ class AirApi {
         nights,
         price,
         threadId,
-        currency = this.config.DEFAULT_PARAMETERS.currency
+        currency = this.config.currency
     } = {}) {
         if (!token) {
             _log2.default.e("Airbnbapi: Can't send a special offer without a token");

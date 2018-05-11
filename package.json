@@ -2,12 +2,12 @@
     "name": "airbnbapijs",
     "version": "0.5.4",
     "description": "Unofficial airbnb.com REST API wrapper for node.js",
-    "main": "build/index.js",
+    "main": "build/main.js",
     "directories": {
-        "lib": "lib"
+        "src": "src"
     },
     "scripts": {
-        "build": "npm run prettier && babel src -d lib ",
+        "build": "npm run prettier && babel src -d build ",
         "test": "npm run build && mocha",
         "prettier": "prettier --write \"src/**/*.js\""
     },
