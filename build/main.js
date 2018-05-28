@@ -385,7 +385,11 @@ class AirApi {
         });
         try {
             const response = await (0, _requestPromise2.default)(options);
-            return response.active_listings;
+            if (response.active_listings) {
+                return response.active_listings.map(listing => listing.listing.listing);
+            } else {
+                return [];
+            }
         } catch (e) {
             _log2.default.e("Airbnbapi: Couldn't get an active listing list for token " + token);
             _log2.default.e(e);

@@ -378,7 +378,11 @@ class AirApi {
         })
         try {
             const response = await requestPromise(options)
-            return response.active_listings
+            if (response.active_listings) {
+                return response.active_listings.map(listing => listing.listing.listing)
+            } else {
+                return []
+            }
         } catch (e) {
             log.e("Airbnbapi: Couldn't get an active listing list for token " + token)
             log.e(e)
