@@ -349,6 +349,42 @@ class AirApi {
         }
     }
 
+    async getHostSummary(token) {
+        if (!token) {
+            log.e("Airbnbapi: Can't get a summary without a token")
+            return null
+        }
+        const options = this.buildOptions({
+            route: `/v1/account/host_summary`,
+            token
+        })
+        try {
+            const response = await requestPromise(options)
+            return response
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't get a host summary for token " + token)
+            log.e(e)
+        }
+    }
+
+    async getOwnActiveListings(token) {
+        if (!token) {
+            log.e("Airbnbapi: Can't get an active listing list without a token")
+            return null
+        }
+        const options = this.buildOptions({
+            route: `/v1/account/host_summary`,
+            token
+        })
+        try {
+            const response = await requestPromise(options)
+            return response.active_listings
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't get an active listing list for token " + token)
+            log.e(e)
+        }
+    }
+
     //////////// THREADS SECTION ////////////
     //////////// THREADS SECTION ////////////
     //////////// THREADS SECTION ////////////

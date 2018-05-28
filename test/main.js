@@ -264,6 +264,36 @@ describe('airbnbapi', () => {
         })
     })
 
+    describe('#getHostSummary(token)', () => {
+        const testFunc = abba.getHostSummary.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+        })
+        nockauth()
+        .get('/v1/account/host_summary')
+        .query(true)
+        .reply(200, {active_listings:[{id: 6789}]})
+
+        it('should return a response object if arguments are correct', async () => {
+            expect(await testFunc('mockcorrecttoken')).to.have.property('active_listings')
+        })
+    })
+
+    describe('#getOwnActiveListings(token)', () => {
+        const testFunc = abba.getOwnActiveListings.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+        })
+        nockauth()
+        .get('/v1/account/host_summary')
+        .query(true)
+        .reply(200, {active_listings:[{id: 6789}]})
+
+        it('should return a response object if arguments are correct', async () => {
+            expect(await testFunc('mockcorrecttoken')).to.be.an('array')
+        })
+    })
+
     describe('#getThread({token, id, currency})', () => {
         const testFunc = abba.getThread.bind(abba)
         it('should return null if no arguments are passed or arguments are missing', async () => {

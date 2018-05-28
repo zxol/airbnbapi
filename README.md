@@ -170,6 +170,20 @@ airbnb.getListingInfoHost({
 // returns extended listing info for your listing (JSON)
 ```
 
+### getHostSummary
+Gets an object containing a host's active listings, alerts, and upcoming reservations
+```javascript
+airbnb.getHostSummary('faketoken3sDdfvtF9if5398j0v5nui')
+// returns host summary info for your account (JSON)
+```
+
+### getOwnActiveListings
+Gets an array containing a host's active listings
+```javascript
+airbnb.getOwnActiveListings('faketoken3sDdfvtF9if5398j0v5nui')
+// returns listing array for your account (JSON)
+```
+
 ---
 
 ## 5. THREADS 💬
