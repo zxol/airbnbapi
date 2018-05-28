@@ -287,7 +287,7 @@ describe('airbnbapi', () => {
         nockauth()
         .get('/v1/account/host_summary')
         .query(true)
-        .reply(200, {active_listings:[{id: 6789}]})
+        .reply(200, {active_listings:[{listing: {listing: {id: 6789}}}]})
 
         it('should return a response object if arguments are correct', async () => {
             expect(await testFunc('mockcorrecttoken')).to.be.an('array')
