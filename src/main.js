@@ -87,8 +87,6 @@ class AirApi {
                 body: { operations: [] }
             })
             let response = await requestPromise(options).catch(e => {})
-            // console.log(JSON.stringify(response, null, 4))
-            // log.i(JSON.stringify(response, null, 4))
             return response ? true : false
         }
     }
@@ -140,13 +138,9 @@ class AirApi {
     async login({ email, password } = {}) {
         if (!email) {
             log.e("Airbnbapi: Can't login without an email.")
-            log.e('email: ' + email)
-            log.e("Please call login({email: '#######', password: '#######'})")
             return null
         } else if (!password) {
             log.e("Airbnbapi: Can't apply for a token without a password.")
-            log.e('Password: ' + password)
-            log.e("Please call login({email: '#######', password: '#######'})")
             return null
         }
         const options = this.buildOptions({

@@ -1,6 +1,7 @@
 require('dotenv').config()
 process.env.NODE_ENV = 'test'
 let abba = require('../build/main.js')
+let log = require('../build/log.js')
 let chai = require('chai')
 let nock = require('nock')
 let _ = require('lodash')
@@ -10,6 +11,16 @@ const apiBaseUrl = 'https://api.airbnb.com'
 const allBut = str =>  new RegExp('^(?!.*'+str+')')
 const nockauth = _ => nock(apiBaseUrl).matchHeader('X-Airbnb-OAuth-Token', 'mockcorrecttoken')
 const nockauthl = _ => nockauth().log(console.log)
+
+
+describe('log', () => {
+    describe('log#i', () => {
+        process.env.LOGLEVEL = 'debug'
+
+
+    })
+})
+
 
 describe('airbnbapi', () => {
     describe('#makeAuthHeader(token)', () => {
