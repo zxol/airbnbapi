@@ -13,10 +13,11 @@ Hi there! 👋
 This is a pre 1.0 library.  Please request endpoints and functionality as repo issues.  Collaborators wanted!
 # Essential Info
 
-- All functions return __promises__  
-- Batch functions are limited to 50 operations at a time
-- You will need to supply a token for every logged in function call
-- Error reporting and data validation is spotty at this stage!
+- All functions return [__promises__.](https://github.com/wbinnssmith/awesome-promises)  
+- The returned data format is pre-parsed JSON, i.e. a javascript object.  Multiple records will be returned as an array.
+- The auth system is a simple crypto token. You will need to supply a token for every protected function call. (I'll improve this soon)
+- Yeah, I know, airlock is a massive pain in the posterior.
+- Error reporting and data validation is spotty at this stage! (plz send halp)
 
 # Getting started 👨‍💻
 
@@ -85,7 +86,7 @@ airbnb.getGuestInfo(2348485493)
 ### getOwnUserInfo
 Obtain user data for the logged in account
 ```javascript
-airbnb.getOwnUserInfo(token)
+airbnb.getOwnUserInfo('faketoken3sDdfvtF9if5398j0v5nui')
 // returns private info about user (JSON)
 ```
 
