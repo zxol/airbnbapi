@@ -17,7 +17,7 @@ This is a pre 1.0 library.  Please request endpoints and functionality as repo i
 - The returned data format is pre-parsed JSON, i.e. a javascript object.  Multiple records will be returned as an array.
 - The auth system is a simple crypto token. You will need to supply a token for every protected function call. (I'll improve this soon)
 - Yeah, I know, airlock is a massive pain in the posterior.
-- Error reporting and data validation is spotty at this stage! (plz send halp)
+- Error reporting and data validation is spotty at this stage! 
 
 # Getting started 👨‍💻
 
