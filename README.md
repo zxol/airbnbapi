@@ -17,7 +17,8 @@ This is a pre 1.0 library.  Please request endpoints and functionality as repo i
 - The returned data format is pre-parsed JSON, i.e. a javascript object.  Multiple records will be returned as an array.
 - The auth system is a simple crypto token.  For the uninitiated, this is like a username and password in one. You will need to supply a token for every protected function call. (I'll improve this soon)
 - Yeah, I know, airlock is a massive pain in the posterior.
-- Error reporting and data validation is spotty at this stage! 
+- Error reporting and data validation is spotty at this stage!
+- This library only has one dependency - request-promise.
 
 # Getting started 👨‍💻
 
@@ -339,4 +340,10 @@ airbnb.setCurrency('USD')
 set the user agent string for the requests
 ```javascript
 airbnb.setUserAgent('Mosaic/0.9')
+```
+
+### setProxy
+set a proxy server to run traffic through
+```javascript
+airbnb.setProxy('myproxy.com')
 ```

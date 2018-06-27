@@ -14,10 +14,15 @@ var _config = require('./config.js');
 
 var _config2 = _interopRequireDefault(_config);
 
+var _metapoints = require('./metapoints.js');
+
+var _metapoints2 = _interopRequireDefault(_metapoints);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class AirApi {
     constructor() {
+        Object.assign(this, _metapoints2.default);
         this.config = Object.assign({}, _config2.default);
     }
 
@@ -32,7 +37,8 @@ class AirApi {
         format,
         qs,
         body,
-        timeout
+        timeout,
+        proxy
     }) {
         const out = {
             method,
@@ -45,9 +51,10 @@ class AirApi {
                 _format: format
             }, qs),
             body,
-            timeout
-            // console.log(JSON.stringify(out, null, 4))
-        };return out;
+            timeout,
+            proxy: this.config.proxy
+        };
+        return out;
     }
 
     //////////// CONFIG SECTION ////////////
@@ -64,6 +71,10 @@ class AirApi {
 
     setUserAgent(userAgentString) {
         this.config.default_headerss['User-Agent'] = userAgentString;
+    }
+
+    setProxy(proxyURL) {
+        this.config.proxy = proxyURL;
     }
 
     //////////// HEADER SECTION ////////////
@@ -472,13 +483,13 @@ class AirApi {
         const options = this.buildOptions({
             route: '/v2/threads',
             token,
-            format: 'for_messaging_sync',
+            format: 'for_messaging_sync_with_posts',
             qs: { _offset: offset, _limit: limit }
         });
         try {
             const response = await (0, _requestPromise2.default)(options);
             if (response.threads) {
-                return response.threads.map(item => item.id);
+                return response.threads; //.map(item => item.id)
             } else return null;
         } catch (e) {
             _log2.default.e("Airbnbapi: Couldn't get thread list for token " + token);

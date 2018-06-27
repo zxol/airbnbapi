@@ -7,11 +7,14 @@ let nock = require('nock')
 let _ = require('lodash')
 let {assert, should, expect} = chai
 
+let dummyData = require('./dummydata.json')
+
+// console.log(JSON.stringify(dummyData, null, 4))
+
 const apiBaseUrl = 'https://api.airbnb.com'
 const allBut = str =>  new RegExp('^(?!.*'+str+')')
 const nockauth = _ => nock(apiBaseUrl).matchHeader('X-Airbnb-OAuth-Token', 'mockcorrecttoken')
 const nockauthl = _ => nockauth().log(console.log)
-
 
 describe('log', () => {
     describe('log#i', () => {
@@ -20,7 +23,6 @@ describe('log', () => {
 
     })
 })
-
 
 describe('airbnbapi', () => {
     describe('#makeAuthHeader(token)', () => {
@@ -280,6 +282,7 @@ describe('airbnbapi', () => {
     })
 
     describe('#getOwnActiveListings(token)', () => {
+        console.log(JSON.stringify(dummyData.getOwnActiveListings, null, 4))
         const testFunc = abba.getOwnActiveListings.bind(abba)
         it('should return null if no arguments are passed or arguments are missing', async () => {
             expect(await testFunc()).to.be.null
@@ -287,7 +290,7 @@ describe('airbnbapi', () => {
         nockauth()
         .get('/v1/account/host_summary')
         .query(true)
-        .reply(200, {active_listings:[{listing: {listing: {id: 6789}}}]})
+        .reply(200, {active_listings: dummyData.getOwnActiveListings})
 
         it('should return a response object if arguments are correct', async () => {
             expect(await testFunc('mockcorrecttoken')).to.be.an('array')
@@ -356,7 +359,7 @@ describe('airbnbapi', () => {
         })
         nockauth()
         .get('/v2/threads')
-        .query(q => q._format === 'for_messaging_sync')
+        .query(q => q._format === 'for_messaging_sync_with_posts')
         .reply(200, {threads:[{id: 1234},{id: 2345},{id: 3456},{id: 5687},{id: 6789}]})
 
         it('should return a list(array) of threads if arguments are correct', async () => {
@@ -611,6 +614,28 @@ describe('airbnbapi', () => {
             .reply(200, {search_results:[{id:123},{id:456},{id:789}], metadata:{foo:'bar'}})
             expect(await testFunc()).to.have.property('search_results')
             expect(await testFunc({location: 'New York, United States', offset: 0, limit: 50, language: 'en', currency: 'USD'})).to.have.property('search_results')
+        })
+    })
+
+    describe('#mGetOwnActiveListings(token)', () => {
+        const testFunc = abba.mGetOwnActiveListingsFull.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+        })
+        nockauth()
+        .get('/v1/account/host_summary')
+        .query(true)
+        .reply(200, {active_listings: dummyData.getOwnActiveListings})
+
+        dummyData.getOwnActiveListings.forEach(listing => {
+            nockauth()
+            .get(`/v1/listings/${listing.listing.listing.id}`)
+            .query(true)
+            .reply(200, {listing:{}})
+        })
+
+        it('should return a response object if arguments are correct', async () => {
+            expect(await testFunc('mockcorrecttoken')).to.be.an('array')
         })
     })
 })

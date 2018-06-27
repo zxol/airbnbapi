@@ -1,0 +1,51 @@
+{
+    "getOwnActiveListings": [
+        {
+            "listing": {
+                "listing": {
+                    "id": 1,
+                    "city": "Shinagawa-ku",
+                    "thumbnail_url": "https://a0.muscache.com/im/pictures/faked.jpg?aki_policy=small",
+                    "medium_url": "https://a0.muscache.com/im/pictures/faked.jpg?aki_policy=medium",
+                    "user_id": 1,
+                    "picture_url": "https://a0.muscache.com/im/pictures/faked.jpg?aki_policy=large",
+                    "xl_picture_url": "https://a0.muscache.com/im/pictures/faked.jpg?aki_policy=x_large",
+                    "price": 74,
+                    "native_currency": "JPY",
+                    "price_native": 8108,
+                    "price_formatted": "¥ 8108",
+                    "lat": 35.9,
+                    "lng": 139.2,
+                    "country": "Japan",
+                    "name": "First dummy Listing",
+                    "smart_location": "Shinagawa-ku, Japan",
+                    "has_double_blind_reviews": false
+                }
+            }
+        },
+        {
+            "listing": {
+                "listing": {
+
+                    "id": 2,
+                    "city": "Nakano-ku",
+                    "thumbnail_url": "https://a0.muscache.com/im/pictures/faked.jpg?aki_policy=small",
+                    "medium_url": "https://a0.muscache.com/im/pictures/faked.jpg?aki_policy=medium",
+                    "user_id": 1,
+                    "picture_url": "https://a0.muscache.com/im/pictures/faked.jpg?aki_policy=large",
+                    "xl_picture_url": "https://a0.muscache.com/im/pictures/faked.jpg?aki_policy=x_large",
+                    "price": 319,
+                    "native_currency": "JPY",
+                    "price_native": 34953,
+                    "price_formatted": "¥ 34953",
+                    "lat": 35.1,
+                    "lng": 139.1,
+                    "country": "Japan",
+                    "name": "Second dummy Listing",
+                    "smart_location": "Nakano-ku, Japan",
+                    "has_double_blind_reviews": false
+                }
+            }
+        }
+    ]
+}

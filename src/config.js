@@ -8,6 +8,7 @@ const config = {
         // 'User-Agent': 'TESTING API'
         // 'User-Agent': randomUseragent.getRandom()
     },
-    currency: 'JPY'
+    currency: 'JPY',
+    proxy: undefined
 }
 export default config

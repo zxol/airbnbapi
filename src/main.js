@@ -1,8 +1,11 @@
 import requestPromise from 'request-promise'
 import log from './log.js'
 import config from './config.js'
+import metapoints from './metapoints.js'
+
 class AirApi {
     constructor() {
+        Object.assign(this, metapoints)
         this.config = Object.assign({}, config)
     }
 
@@ -17,7 +20,8 @@ class AirApi {
         format,
         qs,
         body,
-        timeout
+        timeout,
+        proxy
     }) {
         const out = {
             method,
@@ -31,9 +35,9 @@ class AirApi {
                 ...qs
             },
             body,
-            timeout
+            timeout,
+            proxy: this.config.proxy
         }
-        // console.log(JSON.stringify(out, null, 4))
         return out
     }
 
@@ -51,6 +55,10 @@ class AirApi {
 
     setUserAgent(userAgentString) {
         this.config.default_headerss['User-Agent'] = userAgentString
+    }
+
+    setProxy(proxyURL) {
+        this.config.proxy = proxyURL
     }
 
     //////////// HEADER SECTION ////////////
@@ -465,13 +473,13 @@ class AirApi {
         const options = this.buildOptions({
             route: '/v2/threads',
             token,
-            format: 'for_messaging_sync',
+            format: 'for_messaging_sync_with_posts',
             qs: { _offset: offset, _limit: limit }
         })
         try {
             const response = await requestPromise(options)
             if (response.threads) {
-                return response.threads.map(item => item.id)
+                return response.threads //.map(item => item.id)
             } else return null
         } catch (e) {
             log.e("Airbnbapi: Couldn't get thread list for token " + token)
