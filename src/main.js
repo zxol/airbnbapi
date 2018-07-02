@@ -488,6 +488,33 @@ class AirApi {
     }
 
     // Gets a list of thread id's for a host
+    async getThreadFull({ token, id } = {}) {
+        if (!token) {
+            log.e("Airbnbapi: Can't get a thread without a token")
+            return null
+        }
+        if (!id) {
+            log.e("Airbnbapi: Can't get a thread without an id")
+            return null
+        }
+
+        const options = this.buildOptions({
+            route: `/v2/threads/${id}`,
+            token,
+            format: 'for_messaging_sync_with_posts'
+        })
+        try {
+            const response = await requestPromise(options)
+            if (response) {
+                return response
+            } else return null
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't get thread for id " + id)
+            log.e(e)
+        }
+    }
+
+    // Gets a list of thread id's for a host
     async getThreads({ token, offset = '0', limit = '2' } = {}) {
         if (!token) {
             log.e("Airbnbapi: Can't get a thread list without a token")
