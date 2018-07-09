@@ -233,11 +233,11 @@ describe('airbnbapi', () => {
         })
     })
 
-    describe('#getListingInfo({id})', () => {
+    describe('#getListingInfo(id)', () => {
         const testFunc = abba.getListingInfo.bind(abba)
         it('should return null if no arguments are passed or arguments are missing', async () => {
             expect(await testFunc()).to.be.null
-            expect(await testFunc({not_id:1234})).to.be.null
+            // expect(await testFunc({not_id:1234})).to.be.null
         })
         nock(apiBaseUrl)
         .get('/v2/listings/1234')
@@ -245,7 +245,7 @@ describe('airbnbapi', () => {
         .reply(200, {listing:{}})
 
         it('should return a response object if arguments are correct', async () => {
-            expect(await testFunc({id: 1234})).to.have.property('listing')
+            expect(await testFunc(1234)).to.have.property('listing')
         })
     })
 

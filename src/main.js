@@ -317,7 +317,7 @@ class AirApi {
         }
     }
 
-    async getListingInfo({ id } = {}) {
+    async getListingInfo(id) {
         if (!id) {
             log.e("Airbnbapi: Can't get public listing information without an id")
             return null
@@ -813,6 +813,43 @@ class AirApi {
             return response
         } catch (e) {
             log.e("Airbnbapi: Couldn't send a review for thread  " + thread_id)
+            log.e(e)
+        }
+    }
+
+    async alterationRequestResponse({token, reservationId, alterationId, decision, currency = this.config.currency}) {
+        if (!token) {
+            log.e("Airbnbapi: Can't send an alteration request response without a token")
+            return null
+        } else if (!reservationId) {
+            log.e("Airbnbapi: Can't send an alteration request response without a reservationId")
+            return null
+        } else if (!alterationId) {
+            log.e("Airbnbapi: Can't send an alteration request response without an alterationId")
+            return null
+        } else if (!decision) {
+            log.e("Airbnbapi: Can't send an alteration request response without a decision")
+            return null
+        }
+        const options = this.buildOptions({
+            method: 'PUT',
+            uri: `https://api.airbnb.com/v2/reservation_alterations/${alterationId}`,
+            token,
+            currency,
+            format: 'for_mobile_alterations_v3_host',
+            qs: { reservation_id: reservationId },
+            body: {
+                reservation_id: reservationId,
+                alteration_id: alterationId,
+                status: decision ? 1 : 2
+            },
+            timeout: 10000
+        })
+        try {
+            const response = await requestPromise(options)
+            return response
+        } catch (e) {
+            log.e("Airbnbapi: Can't send an alteration request response fro reservation " + reservationId)
             log.e(e)
         }
     }

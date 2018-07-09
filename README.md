@@ -38,7 +38,7 @@ import airbnb from 'airbnbapijs'
 # Reference 📗
 
 ## Contents
-1. Authorization
+1. [Authorization](#AUTHORIZATION)
 1. Users
 1. Calendars
 1. Listings
@@ -54,21 +54,21 @@ import airbnb from 'airbnbapijs'
 ### testAuth
 
 Test a token
-```javascript
+```js
 airbnb.testAuth('faketoken3sDdfvtF9if5398j0v5nui')
 // returns bool
 ```
 ### newAccessToken
 
 Request a new token
-```javascript
+```js
 airbnb.newAccessToken({username:'foo@bar.com', password:'hunter2'})
 // returns {token: 'faketoken3sDdfvtF9if5398j0v5nui'} or {error: {error obj}}
 ```
 ### login
 
 Request a new token (v2 endpoint).  Similar to the above function but returns a user info summary with much more information.
-```javascript
+```js
 airbnb.login({username:'foo@bar.com', password:'hunter2'})
 // returns a user info object (includes token) or {error: {error obj}}
 ```
@@ -80,13 +80,13 @@ TODO: support other login methods
 
 ### getGuestInfo
 Get a user's public facing information
-```javascript
+```js
 airbnb.getGuestInfo(2348485493)
 // returns public info about user (JSON)
 ```
 ### getOwnUserInfo
 Obtain user data for the logged in account
-```javascript
+```js
 airbnb.getOwnUserInfo('faketoken3sDdfvtF9if5398j0v5nui')
 // returns private info about user (JSON)
 ```
@@ -97,7 +97,7 @@ airbnb.getOwnUserInfo('faketoken3sDdfvtF9if5398j0v5nui')
 
 ### getPublicListingCalendar
 Public availability and price data on a listing.  `count` is the duration in months.
-```javascript
+```js
 airbnb.getPublicListingCalendar({
     id: 109834757,
     month: 1,
@@ -108,7 +108,7 @@ airbnb.getPublicListingCalendar({
 ```
 ### getCalendar
 Private calendar data regarding your listings.  Reservations, cancellations, prices, blocked days.
-```javascript
+```js
 airbnb.getCalendar({
         token: 'faketoken3sDdfvtF9if5398j0v5nui',
         id: 109834757,
@@ -119,7 +119,7 @@ airbnb.getCalendar({
 ```
 ### setPriceForDay
 Set a price for a day.
-```javascript
+```js
 airbnb.setPriceForDay({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 109834757,
@@ -130,7 +130,7 @@ airbnb.setPriceForDay({
 ```
 ### setAvailabilityForDay
 Set availability for a day.
-```javascript
+```js
 airbnb.setAvailabilityForDay({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 109834757,
@@ -146,7 +146,7 @@ airbnb.setAvailabilityForDay({
 
 ### listingSearch
 Airbnb's mighty search bar in JSON form.  More options coming soon.
-```javascript
+```js
 airbnb.listingSearch({
     location: 'New York, United States',
     offset: 0,
@@ -158,13 +158,13 @@ airbnb.listingSearch({
 ```
 ### getListingInfo
 Gets public facing data on any listing.
-```javascript
-airbnb.getListingInfo({id: 109834757})
+```js
+airbnb.getListingInfo(109834757)
 // returns public info for any listing (JSON)
 ```
 ### getListingInfoHost
 Gets private data on one of your listings.
-```javascript
+```js
 airbnb.getListingInfoHost({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 109834757
@@ -174,14 +174,14 @@ airbnb.getListingInfoHost({
 
 ### getHostSummary
 Gets an object containing a host's active listings, alerts, and upcoming reservations
-```javascript
+```js
 airbnb.getHostSummary('faketoken3sDdfvtF9if5398j0v5nui')
 // returns host summary info for your account (JSON)
 ```
 
 ### getOwnActiveListings
 Gets an array containing a host's active listings
-```javascript
+```js
 airbnb.getOwnActiveListings('faketoken3sDdfvtF9if5398j0v5nui')
 // returns listing array for your account (JSON)
 ```
@@ -192,7 +192,7 @@ airbnb.getOwnActiveListings('faketoken3sDdfvtF9if5398j0v5nui')
 
 ### getThread
 Returns a conversation with a guest or host.  This is a legacy endpoint which is somewhat limited in the content (only basic messages are reported in the 'posts' array)
-```javascript
+```js
 airbnb.getThread({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 909878797
@@ -201,7 +201,7 @@ airbnb.getThread({
 ```
 ### getThreads
 A simple list of thread ID's, ordered by latest update.  The offset is how many to skip, and the limit is how many to report.
-```javascript
+```js
 airbnb.getThreads({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     offset: 0,
@@ -212,7 +212,7 @@ airbnb.getThreads({
 
 ### getThreadsFull
 This is the best way to pull thread data. Returns an array of full thread data, ordered by latest update.  The `offset` is how many to skip, and the `limit` is how many to report.
-```javascript
+```js
 airbnb.getThreadsFull({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     offset: 0,
@@ -223,7 +223,7 @@ airbnb.getThreadsFull({
 ### getThreadsBatch
 
 A batch version of the above. You can grab a collection of threads referenced by thread ID.
-```javascript
+```js
 airbnb.getThreadsBatch({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     ids: [23049848, 203495875, 398328244]
@@ -237,7 +237,7 @@ airbnb.getThreadsBatch({
 
 ### getReservation
 Reservation data for one reservation.
-```javascript
+```js
 airbnb.getReservation({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 909878797
@@ -247,7 +247,7 @@ airbnb.getReservation({
 ### getReservations
 
 Returns a list of reservations in the same format as above, ordered by latest update
-```javascript
+```js
 airbnb.getReservations({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     offset: 0,
@@ -258,7 +258,7 @@ airbnb.getReservations({
 ### getReservationsBatch
 
 Batch call for grabbing a list of reservations by ID.
-```javascript
+```js
 airbnb.getReservationsBatch({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     ids: [98769876, 98769543, 98756745]
@@ -272,7 +272,7 @@ airbnb.getReservationsBatch({
 
 ### sendMessage
 Send a message to a thread.
-```javascript
+```js
 airbnb.sendMessage({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 2039448789,
@@ -282,7 +282,7 @@ airbnb.sendMessage({
 ```
 ### sendPreApproval
 Send a pre-approval to a guest.
-```javascript
+```js
 airbnb.sendPreApproval({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     thread_id: 2039448789,
@@ -293,7 +293,7 @@ airbnb.sendPreApproval({
 ```
 ### sendReview
 Send a review to a guest after they have checked out. (`id` is the thread id)
-```javascript
+```js
 airbnb.sendReview({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     id: 2039448789,
@@ -308,7 +308,7 @@ airbnb.sendReview({
 ```
 ### sendSpecialOffer
 Send a special offer to a guest.
-```javascript
+```js
 airbnb.sendSpecialOffer({
     token: 'faketoken3sDdfvtF9if5398j0v5nui',
     check_in: "2018-10-13T00:00:00+00:00",
@@ -322,28 +322,42 @@ airbnb.sendSpecialOffer({
 // returns confirmation
 ```
 
+### alterationRequestResponse
+Send a "reservation alteration request response" to a guest  
+To accept the request, supply the `decision` prop with `true`  
+To decline the request, supply the `decision` prop with `false`
+```js
+alterationRequestResponse({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    reservationId: 23049459,
+    alterationId: 2134094,
+    decision: true,
+    currency: 'USD'})
+// returns alteration object, or an error object.
+```
+
 ## 8. CONFIGURATION ⚙️
 
 ### setApiKey
 Use an api key different from the standard one
-```javascript
+```js
 airbnb.setApiKey('01123581321345589144233377610987')
 ```
 
 ### setCurrency
 Set the default [currency](https://www.iban.com/currency-codes.html) (the default is JPY, sorry USA)
-```javascript
+```js
 airbnb.setCurrency('USD')
 ```
 
 ### setUserAgent
 set the user agent string for the requests
-```javascript
+```js
 airbnb.setUserAgent('Mosaic/0.9')
 ```
 
 ### setProxy
 set a proxy server to run traffic through
-```javascript
+```js
 airbnb.setProxy('myproxy.com')
 ```
