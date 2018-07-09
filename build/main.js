@@ -327,14 +327,13 @@ class AirApi {
         }
     }
 
-    async getListingInfo({ id } = {}) {
+    async getListingInfo(id) {
         if (!id) {
             _log2.default.e("Airbnbapi: Can't get public listing information without an id");
             return null;
         }
         const options = this.buildOptions({
-            route: `/v2/listings/${id}`,
-            format: 'v1_legacy_for_p3'
+            route: `/v1/listings/${id}`
         });
         try {
             const response = await (0, _requestPromise2.default)(options);
@@ -823,6 +822,49 @@ class AirApi {
             return response;
         } catch (e) {
             _log2.default.e("Airbnbapi: Couldn't send a review for thread  " + thread_id);
+            _log2.default.e(e);
+        }
+    }
+
+    async alterationRequestResponse({
+        token,
+        reservationId,
+        alterationId,
+        decision,
+        currency = this.config.currency
+    }) {
+        if (!token) {
+            _log2.default.e("Airbnbapi: Can't send an alteration request response without a token");
+            return null;
+        } else if (!reservationId) {
+            _log2.default.e("Airbnbapi: Can't send an alteration request response without a reservationId");
+            return null;
+        } else if (!alterationId) {
+            _log2.default.e("Airbnbapi: Can't send an alteration request response without an alterationId");
+            return null;
+        } else if (!decision) {
+            _log2.default.e("Airbnbapi: Can't send an alteration request response without a decision");
+            return null;
+        }
+        const options = this.buildOptions({
+            method: 'PUT',
+            uri: `https://api.airbnb.com/v2/reservation_alterations/${alterationId}`,
+            token,
+            currency,
+            format: 'for_mobile_alterations_v3_host',
+            qs: { reservation_id: reservationId },
+            body: {
+                reservation_id: reservationId,
+                alteration_id: alterationId,
+                status: decision ? 1 : 2
+            },
+            timeout: 10000
+        });
+        try {
+            const response = await (0, _requestPromise2.default)(options);
+            return response;
+        } catch (e) {
+            _log2.default.e("Airbnbapi: Can't send an alteration request response fro reservation " + reservationId);
             _log2.default.e(e);
         }
     }

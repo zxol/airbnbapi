@@ -323,8 +323,7 @@ class AirApi {
             return null
         }
         const options = this.buildOptions({
-            route: `/v2/listings/${id}`,
-            format: 'v1_legacy_for_p3'
+            route: `/v1/listings/${id}`
         })
         try {
             const response = await requestPromise(options)
@@ -817,7 +816,13 @@ class AirApi {
         }
     }
 
-    async alterationRequestResponse({token, reservationId, alterationId, decision, currency = this.config.currency}) {
+    async alterationRequestResponse({
+        token,
+        reservationId,
+        alterationId,
+        decision,
+        currency = this.config.currency
+    }) {
         if (!token) {
             log.e("Airbnbapi: Can't send an alteration request response without a token")
             return null
@@ -849,7 +854,10 @@ class AirApi {
             const response = await requestPromise(options)
             return response
         } catch (e) {
-            log.e("Airbnbapi: Can't send an alteration request response fro reservation " + reservationId)
+            log.e(
+                "Airbnbapi: Can't send an alteration request response fro reservation " +
+                    reservationId
+            )
             log.e(e)
         }
     }

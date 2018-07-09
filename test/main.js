@@ -240,7 +240,7 @@ describe('airbnbapi', () => {
             // expect(await testFunc({not_id:1234})).to.be.null
         })
         nock(apiBaseUrl)
-        .get('/v2/listings/1234')
+        .get('/v1/listings/1234')
         .query(true)
         .reply(200, {listing:{}})
 
