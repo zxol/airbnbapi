@@ -49,7 +49,7 @@ import airbnb from 'airbnbapijs'
 
 ---
 
-## 1. AUTHORIZATION 🔒
+## AUTHORIZATION
 
 ### testAuth
 
@@ -76,7 +76,7 @@ TODO: support other login methods
 
 ---
 
-## 2. USERS 👤
+## USERS
 
 ### getGuestInfo
 Get a user's public facing information
@@ -93,7 +93,7 @@ airbnb.getOwnUserInfo('faketoken3sDdfvtF9if5398j0v5nui')
 
 ---
 
-## 3. CALENDARS 📅
+## CALENDARS
 
 ### getPublicListingCalendar
 Public availability and price data on a listing.  `count` is the duration in months.
@@ -142,7 +142,7 @@ airbnb.setAvailabilityForDay({
 
 ---
 
-## 4. LISTINGS 🏘️
+## LISTINGS
 
 ### listingSearch
 Airbnb's mighty search bar in JSON form.  More options coming soon.
@@ -188,7 +188,7 @@ airbnb.getOwnActiveListings('faketoken3sDdfvtF9if5398j0v5nui')
 
 ---
 
-## 5. THREADS 💬
+## THREADS
 
 ### getThread
 Returns a conversation with a guest or host.  This is a legacy endpoint which is somewhat limited in the content (only basic messages are reported in the 'posts' array)
@@ -233,7 +233,7 @@ airbnb.getThreadsBatch({
 
 ---
 
-## 6. RESERVATIONS 🔖
+## RESERVATIONS
 
 ### getReservation
 Reservation data for one reservation.
@@ -268,7 +268,7 @@ airbnb.getReservationsBatch({
 
 ---
 
-## 7. POSTING 💌
+## POSTING
 
 ### sendMessage
 Send a message to a thread.
@@ -336,7 +336,7 @@ alterationRequestResponse({
 // returns alteration object, or an error object.
 ```
 
-## 8. CONFIGURATION ⚙️
+## CONFIGURATION
 
 ### setApiKey
 Use an api key different from the standard one
