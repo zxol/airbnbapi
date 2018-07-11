@@ -38,7 +38,7 @@ import airbnb from 'airbnbapijs'
 # Reference 📗
 
 ## Contents
-1. [Authorization](#AUTHORIZATION)
+1. Authorization
 1. Users
 1. Calendars
 1. Listings

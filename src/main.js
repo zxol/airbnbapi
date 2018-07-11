@@ -9,6 +9,9 @@ class AirApi {
         this.config = Object.assign({}, config)
     }
 
+    // buildOptions() is a factory function to build HTML request data.
+    // It's used to set config data and common defaults that can be overwritten.
+    // It makes endpoints less verbose.
     buildOptions({
         token,
         method = 'GET',
@@ -27,7 +30,11 @@ class AirApi {
             method,
             uri: uri || this.config.domain + route,
             json,
-            headers: { ...this.config.default_headers, ...this.makeAuthHeader(token), ...headers },
+            headers: {
+                ...this.config.default_headers,
+                'X-Airbnb-OAuth-Token': token,
+                ...headers
+            },
             qs: {
                 key: this.config.api_key,
                 currency,
@@ -54,7 +61,7 @@ class AirApi {
     }
 
     setUserAgent(userAgentString) {
-        this.config.default_headerss['User-Agent'] = userAgentString
+        this.config.default_headers['User-Agent'] = userAgentString
     }
 
     setProxy(proxyURL) {

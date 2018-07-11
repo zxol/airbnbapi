@@ -6,6 +6,8 @@ tmp
 
 temp
 
+decompiled_requests
+
 # Logs
 logs
 *.log
