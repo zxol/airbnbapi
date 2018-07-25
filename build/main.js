@@ -48,7 +48,7 @@ class AirApi {
             uri: uri || this.config.domain + route,
             json,
             headers: _extends({}, this.config.default_headers, {
-                'X-Airbnb-OAuth-Token': token
+                'X-Airbnb-OAuth-Token': token === 'public' ? '' : this.config.token || token
             }, headers),
             qs: _extends({
                 key: this.config.api_key,
@@ -66,6 +66,14 @@ class AirApi {
     //////////// CONFIG SECTION ////////////
     //////////// CONFIG SECTION ////////////
 
+    setDefaultToken(token) {
+        if (token) {
+            this.config.token = token;
+        } else {
+            this.config.token = undefined;
+        }
+    }
+
     setApiKey(key) {
         this.config.api_key = key;
     }
@@ -82,31 +90,13 @@ class AirApi {
         this.config.proxy = proxyURL;
     }
 
-    //////////// HEADER SECTION ////////////
-    //////////// HEADER SECTION ////////////
-    //////////// HEADER SECTION ////////////
-
-    // returns the typical request header used for all logged in endpoints.
-    makeAuthHeader(token) {
-        if (!token) {
-            // log.i('Airbnbapi: No token included for makeAuthHeader() call')
-            return undefined;
-        } else {
-            return {
-                // 'User-Agent': randomUseragent.getRandom(),
-                'X-Airbnb-OAuth-Token': token,
-                'Content-Type': 'application/json; charset=UTF-8'
-            };
-        }
-    }
-
     //////////// AUTH SECTION ////////////
     //////////// AUTH SECTION ////////////
     //////////// AUTH SECTION ////////////
 
     // Ping server to see if the token is good.
     async testAuth(token) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.i('Airbnbapi: No token included for testAuth() call');
             return null;
         } else {
@@ -130,6 +120,7 @@ class AirApi {
             return null;
         }
         const options = this.buildOptions({
+            token: 'public',
             method: 'POST',
             route: '/v1/authorize',
             body: {
@@ -169,6 +160,7 @@ class AirApi {
             return null;
         }
         const options = this.buildOptions({
+            token: 'public',
             method: 'POST',
             route: '/v2/logins',
             body: {
@@ -202,6 +194,7 @@ class AirApi {
             return null;
         }
         const options = this.buildOptions({
+            token: 'public',
             route: '/v2/calendar_months',
             format: 'with_conditions',
             qs: {
@@ -222,7 +215,7 @@ class AirApi {
 
     async getCalendar({ token, id, startDate, endDate } = {}) {
         //log.i(colors.magenta('Airbnbapi: Requesting calendar for [ ' + id + ' ] --'))
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a calendar without a token");
             return null;
         } else if (!id) {
@@ -305,7 +298,7 @@ class AirApi {
     //////////// LISTING SECTION ////////////
 
     async setHouseManual({ token, id, manual } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't set a house manual without a token");
             return null;
         } else if (!id) {
@@ -338,6 +331,7 @@ class AirApi {
             return null;
         }
         const options = this.buildOptions({
+            token: 'public',
             route: `/v1/listings/${id}`
         });
         try {
@@ -350,7 +344,7 @@ class AirApi {
     }
 
     async getListingInfoHost({ token, id } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a listing without a token");
             return null;
         } else if (!id) {
@@ -372,7 +366,7 @@ class AirApi {
     }
 
     async getHostSummary(token) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a summary without a token");
             return null;
         }
@@ -390,7 +384,7 @@ class AirApi {
     }
 
     async getOwnActiveListings(token) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get an active listing list without a token");
             return null;
         }
@@ -417,7 +411,7 @@ class AirApi {
 
     // Gets all the data for one thread
     async getThread({ token, id, currency = this.config.currency } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a thread without a token");
             return null;
         } else if (!id) {
@@ -440,7 +434,7 @@ class AirApi {
 
     async getThreadsBatch({ token, ids, currency = this.config.currency } = {}) {
         //log.i(colors.magenta('Airbnbapi: Requesting calendar for [ ' + id + ' ] --'))
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get threads without a token");
             return null;
         } else if (!ids) {
@@ -480,7 +474,7 @@ class AirApi {
 
     // Gets a list of thread id's for a host
     async getThreadsFull({ token, offset = '0', limit = '2' } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a thread list without a token");
             return null;
         }
@@ -503,7 +497,7 @@ class AirApi {
 
     // Gets a list of thread id's for a host
     async getThreadFull({ token, id } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a thread without a token");
             return null;
         }
@@ -530,7 +524,7 @@ class AirApi {
 
     // Gets a list of thread id's for a host
     async getThreads({ token, offset = '0', limit = '2' } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a thread list without a token");
             return null;
         }
@@ -552,7 +546,7 @@ class AirApi {
 
     // Create a new thread
     async createThread({ token, id, checkIn, checkOut, guestNum = 1, message } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't create a thread without a token");
             return null;
         } else if (!id) {
@@ -594,7 +588,7 @@ class AirApi {
     //////////// RESERVATIONS SECTION ////////////
 
     async getReservations({ token, offset = '0', limit = '20' } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a reservation list without a token");
             return null;
         }
@@ -616,7 +610,7 @@ class AirApi {
     async getReservationsBatch({ token, ids, currency = this.config.currency } = {}) {
         // TODO change to reservation
         //log.i(colors.magenta('Airbnbapi: Requesting calendar for [ ' + id + ' ] --'))
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get reservations without a token");
             return null;
         } else if (!ids || !Array.isArray(ids)) {
@@ -653,7 +647,7 @@ class AirApi {
     }
 
     async getReservation({ token, id, currency } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a reservation without a token");
             return null;
         } else if (!id) {
@@ -677,7 +671,7 @@ class AirApi {
 
     // Send a message to a thread (guest)
     async sendMessage({ token, id, message } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't send a message without a token");
             return null;
         } else if (!id) {
@@ -707,7 +701,7 @@ class AirApi {
     // Send pre-approval to an inquiry
     // requires a id. id, and optional message
     async sendPreApproval({ token, thread_id, listing_id, message = '' } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't send pre-approval without a token");
             return null;
         } else if (!thread_id) {
@@ -746,7 +740,7 @@ class AirApi {
         respect_house_rules = 5,
         recommend = true
     } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't send a review without a token");
             return null;
         } else if (!id) {
@@ -785,7 +779,7 @@ class AirApi {
         threadId,
         currency = this.config.currency
     } = {}) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't send a special offer without a token");
             return null;
         } else if (!startDate) {
@@ -838,7 +832,7 @@ class AirApi {
         decision,
         currency = this.config.currency
     }) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't send an alteration request response without a token");
             return null;
         } else if (!reservationId) {
@@ -879,7 +873,7 @@ class AirApi {
             _log2.default.e("Airbnbapi: Can't get guest info without an id");
             return null;
         }
-        const options = this.buildOptions({ route: `/v2/users/${id}` });
+        const options = this.buildOptions({ token: 'public', route: `/v2/users/${id}` });
         try {
             const response = await (0, _requestPromise2.default)(options);
             return response && response.user ? response.user : undefined;
@@ -890,7 +884,7 @@ class AirApi {
     }
 
     async getOwnUserInfo(token) {
-        if (!token) {
+        if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get user info without a token");
             return null;
         }
@@ -913,6 +907,7 @@ class AirApi {
         currency = 'USD'
     } = {}) {
         const options = this.buildOptions({
+            token: 'public',
             route: '/v2/search_results',
             currency,
             qs: {
