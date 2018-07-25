@@ -15,7 +15,7 @@ This is a pre 1.0 library.  Please request endpoints and functionality as repo i
 
 - All functions return [__promises__.](https://github.com/wbinnssmith/awesome-promises)  
 - The returned data format is pre-parsed JSON, i.e. a javascript object.  Multiple records will be returned as an array.
-- The auth system is a simple crypto token.  For the uninitiated, this is like a username and password in one. You will need to supply a token for every protected function call. (I'll improve this soon)
+- The auth system is a simple crypto token.  For the uninitiated, this is like a username and password in one. If you're only using a single account, you can supply a token with `.setDefaultToken()`, otherwise, you will have to supply a token with every function call. 
 - Yeah, I know, airlock is a massive pain in the posterior.
 - Error reporting and data validation is spotty at this stage!
 - This library only has one dependency - request-promise.
@@ -72,6 +72,14 @@ Request a new token (v2 endpoint).  Similar to the above function but returns a 
 airbnb.login({username:'foo@bar.com', password:'hunter2'})
 // returns a user info object (includes token) or {error: {error obj}}
 ```
+
+### setDefaultToken
+Set the token to use if a token is not supplied for an endpoint function.
+```js
+airbnb.setDefaultToken('faketoken3sDdfvtF9if5398j0v5nui')
+
+```
+
 TODO: support other login methods
 
 ---
@@ -337,6 +345,13 @@ alterationRequestResponse({
 ```
 
 ## CONFIGURATION
+
+### setDefaultToken
+Set the token to use if a token is not supplied for an endpoint function.
+```js
+airbnb.setDefaultToken('faketoken3sDdfvtF9if5398j0v5nui')
+
+```
 
 ### setApiKey
 Use an api key different from the standard one

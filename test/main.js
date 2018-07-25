@@ -16,29 +16,7 @@ const allBut = str =>  new RegExp('^(?!.*'+str+')')
 const nockauth = _ => nock(apiBaseUrl).matchHeader('X-Airbnb-OAuth-Token', 'mockcorrecttoken')
 const nockauthl = _ => nockauth().log(console.log)
 
-describe('log', () => {
-    describe('log#i', () => {
-        process.env.LOGLEVEL = 'debug'
-
-
-    })
-})
-
 describe('airbnbapi', () => {
-    describe('#makeAuthHeader(token)', () => {
-        it('should return null if a token is not passed', () => {
-            expect(abba.makeAuthHeader()).to.be.undefined
-        })
-        it('should return type object', () => {
-            expect(abba.makeAuthHeader('z')).to.be.an('object')
-        })
-        it('return object should have property [content-type]', () => {
-            expect(abba.makeAuthHeader('z')).to.have.property('Content-Type')
-        })
-        it('return object should have property [X-Airbnb-OAuth-Token]', () => {
-            expect(abba.makeAuthHeader('z')).to.have.property('X-Airbnb-OAuth-Token')
-        })
-    })
 
     describe('#testAuth(token)', () => {
         it('should return null if a token is not passed', async () => {
