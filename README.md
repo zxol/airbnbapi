@@ -9,13 +9,13 @@
 ---
 
 Hi there! 👋  
-*Disclaimer: this library is not associated with airbnb.com and should only be used for non-profit and educational reasons.*  
+*Disclaimer: this library is not associated with airbnb and should only be used for educational reasons.  It is an interface for a private API used by airbnb's mobile applications.  (Ab)using it could result in an account ban.*  
 This is a pre 1.0 library.  Please request endpoints and functionality as repo issues.  Collaborators wanted!
 # Essential Info
 
 - All functions return [__promises__.](https://github.com/wbinnssmith/awesome-promises)  
 - The returned data format is pre-parsed JSON, i.e. a javascript object.  Multiple records will be returned as an array.
-- The auth system is a simple crypto token.  For the uninitiated, this is like a username and password in one. If you're only using a single account, you can supply a token with `.setDefaultToken()`, otherwise, you will have to supply a token with every function call. 
+- The auth system is a simple crypto token.  For the uninitiated, this is like a username and password in one. If you're only using a single account, you can supply a token with `.setDefaultToken()`, otherwise, you will have to supply a token with every function call.
 - Yeah, I know, airlock is a massive pain in the posterior.
 - Error reporting and data validation is spotty at this stage!
 - This library only has one dependency - request-promise.
@@ -80,7 +80,7 @@ airbnb.setDefaultToken('faketoken3sDdfvtF9if5398j0v5nui')
 
 ```
 
-TODO: support other login methods
+TODO: support other login methods (facebook, twitter, etc...)
 
 ---
 
@@ -163,7 +163,7 @@ airbnb.listingSearch({
     currency: 'USD',
     guests: 6, // Number of guests for price quote
     instantBook: true, // only list instant bookable listings.
-    minBathrooms: 0, 
+    minBathrooms: 0,
     minBedrooms: 2,
     minBeds: 6,
     minPrice: 0,
@@ -354,6 +354,18 @@ alterationRequestResponse({
 ```
 
 ## CONFIGURATION
+
+### setConfig
+Set multiple config variables at once
+```js
+setConfig({
+    defaultToken: 'faketoken3sDdfvtF9if5398j0v5nui',
+    apiKey: '01123581321345589144233377610987',
+    currency: 'USD',
+    userAgent: 'Mosaic/0.9',
+    proxy: 'myproxy.com'
+})
+```
 
 ### setDefaultToken
 Set the token to use if a token is not supplied for an endpoint function.
