@@ -12,7 +12,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
     todo: 'make meta endpoints for combining data from multiple endpoints',
-
     async mGetOwnActiveListingsFull(token) {
         if (!token) {
             _log2.default.e("Airbnbapi: Can't get an active listing list without a token");

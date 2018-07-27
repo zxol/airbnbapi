@@ -153,14 +153,23 @@ airbnb.setAvailabilityForDay({
 ## LISTINGS
 
 ### listingSearch
-Airbnb's mighty search bar in JSON form.  More options coming soon.
+Airbnb's mighty search bar in JSON form. All arguments are optional.
 ```js
 airbnb.listingSearch({
-    location: 'New York, United States',
+    location: Akihabara, Tokyo',
     offset: 0,
     limit: 20,
     language: 'en-US',
-    currency: 'USD'
+    currency: 'USD',
+    guests: 6, // Number of guests for price quote
+    instantBook: true, // only list instant bookable listings.
+    minBathrooms: 0, 
+    minBedrooms: 2,
+    minBeds: 6,
+    minPrice: 0,
+    maxPrice: 0,
+    minPicCount: 4,
+    sortDirection: 1  // 1 = forward, 0 = reverse
 })
 // returns an array of listings
 ```

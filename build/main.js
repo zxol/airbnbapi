@@ -904,7 +904,16 @@ class AirApi {
         offset = 0,
         limit = 20,
         language = 'en-US',
-        currency = 'USD'
+        currency = this.config.currency,
+        guests,
+        instantBook,
+        minBathrooms,
+        minBedrooms,
+        minBeds,
+        minPrice,
+        maxPrice,
+        minPicCount,
+        sortDirection
     } = {}) {
         const options = this.buildOptions({
             token: 'public',
@@ -914,7 +923,16 @@ class AirApi {
                 locale: language,
                 location,
                 _offset: offset,
-                _limit: limit
+                _limit: limit,
+                guests,
+                ib: instantBook,
+                min_bathrooms: minBathrooms,
+                min_bedrooms: minBedrooms,
+                min_beds: minBeds,
+                price_min: minPrice,
+                price_max: maxPrice,
+                min_num_pic_urls: minPicCount,
+                sort: sortDirection
             }
         });
         try {
