@@ -52,6 +52,20 @@ class AirApi {
     //////////// CONFIG SECTION ////////////
     //////////// CONFIG SECTION ////////////
 
+    setConfig({
+        defaultToken,
+        apiKey,
+        currency,
+        userAgent,
+        proxy
+    }) {
+        defaultToken    && this.config.token = defaultToken
+        apiKey          && this.config.api_key = apiKey
+        currency        && this.config.currency = currency
+        userAgent       && this.config.default_headers['User-Agent'] = userAgent
+        proxy           && this.config.proxy = proxy
+    }
+
     setDefaultToken(token) {
         if (token) {
             this.config.token = token
