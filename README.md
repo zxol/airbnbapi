@@ -156,7 +156,7 @@ airbnb.setAvailabilityForDay({
 Airbnb's mighty search bar in JSON form. All arguments are optional.
 ```js
 airbnb.listingSearch({
-    location: Akihabara, Tokyo',
+    location: 'Akihabara, Tokyo',
     offset: 0,
     limit: 20,
     language: 'en-US',
