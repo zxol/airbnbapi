@@ -1,6 +1,6 @@
 {
     "name": "airbnbapijs",
-    "version": "0.9.0",
+    "version": "0.10.0",
     "description": "Unofficial airbnb.com REST API wrapper for node.js",
     "main": "build/main.js",
     "directories": {
