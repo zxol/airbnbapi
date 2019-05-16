@@ -170,6 +170,12 @@ airbnb.listingSearch({
     minBeds: 6,
     minPrice: 0,
     maxPrice: 0,
+    superhost: true,
+    amenities: [1,2,4,23], // array of IDs.
+    hostLanguages: [1,3,6], // array of IDs.
+    keywords: 'ocean view,garden,quiet', //comma separated
+    roomTypes: ['Entire home/apt', 'Private room', 'Shared room'],
+    neighborhoods: ['westside', 'riverside'],
     minPicCount: 4,
     sortDirection: 1  // 1 = forward, 0 = reverse
 })

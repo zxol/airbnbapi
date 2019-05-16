@@ -922,6 +922,12 @@ class AirApi {
         minBeds,
         minPrice,
         maxPrice,
+        superhost,
+        amenities,
+        hostLanguages,
+        keywords,
+        roomTypes,
+        neighborhoods,
         minPicCount,
         sortDirection
     } = {}) {
@@ -931,9 +937,9 @@ class AirApi {
             currency,
             qs: {
                 locale: language,
+                location,
                 checkin,
                 checkout,
-                location,
                 _offset: offset,
                 _limit: limit,
                 guests,
@@ -943,6 +949,12 @@ class AirApi {
                 min_beds: minBeds,
                 price_min: minPrice,
                 price_max: maxPrice,
+                superhost,
+                hosting_amenities: amenities,
+                languages: hostLanguages,
+                keywords: keywords,
+                room_types: roomTypes,
+                neighborhoods: neighborhoods,
                 min_num_pic_urls: minPicCount,
                 sort: sortDirection
             }
