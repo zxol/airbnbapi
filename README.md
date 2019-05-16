@@ -157,6 +157,8 @@ Airbnb's mighty search bar in JSON form. All arguments are optional.
 ```js
 airbnb.listingSearch({
     location: 'Akihabara, Tokyo',
+    checkin: '2020-01-21',
+    checkout: '2020-02-10',
     offset: 0,
     limit: 20,
     language: 'en-US',

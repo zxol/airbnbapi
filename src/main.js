@@ -904,6 +904,8 @@ class AirApi {
 
     async listingSearch({
         location = 'New York, United States',
+        checkin,
+        checkout,
         offset = 0,
         limit = 20,
         language = 'en-US',
@@ -924,6 +926,8 @@ class AirApi {
             currency,
             qs: {
                 locale: language,
+                checkin,
+                checkout,
                 location,
                 _offset: offset,
                 _limit: limit,
