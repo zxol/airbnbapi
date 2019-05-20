@@ -212,6 +212,17 @@ airbnb.getOwnActiveListings('faketoken3sDdfvtF9if5398j0v5nui')
 ```
 
 ---
+### getOwnListings
+Gets an array containing a host's listings
+```js
+airbnb.getOwnListings({
+  token:'faketoken3sDdfvtF9if5398j0v5nui',
+  userId: '2344594'
+})
+// returns listing array for your account (JSON)
+```
+
+---
 
 ## THREADS
 

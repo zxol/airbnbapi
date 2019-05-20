@@ -1,6 +1,6 @@
 {
     "name": "airbnbapijs",
-    "version": "0.10.3",
+    "version": "0.10.4",
     "description": "Unofficial airbnb.com REST API wrapper for node.js",
     "main": "build/main.js",
     "directories": {
@@ -11,7 +11,7 @@
         "test": "npm run build && nyc mocha",
         "coverage": "nyc report --reporter=text-lcov | coveralls",
         "prettier": "prettier --write \"src/**/*.js\"",
-        "temp": "node index.js"
+        "temp": "npm run build; node index.js"
     },
     "repository": {
         "type": "git",

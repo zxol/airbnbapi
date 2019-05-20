@@ -404,6 +404,31 @@ class AirApi {
             log.e(e)
         }
     }
+    async getOwnListings({ token, userId }) {
+        if (!(token || this.config.token)) {
+            log.e("Airbnbapi: Can't get an listing list without a token")
+            return null
+        }
+        const options = this.buildOptions({
+            route: `/v2/listings`,
+            format: `v1_legacy_long`,
+            qs: {
+                user_id: userId
+            },
+            token
+        })
+        try {
+            const response = await requestPromise(options)
+            if (response) {
+                return response.listings
+            } else {
+                return []
+            }
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't get an listing list for token " + token)
+            log.e(e)
+        }
+    }
 
     //////////// THREADS SECTION ////////////
     //////////// THREADS SECTION ////////////
