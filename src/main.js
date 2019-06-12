@@ -121,27 +121,16 @@ class AirApi {
             }
         })
 
-        try {
-            const response = await requestPromise(options)
-            if (response && response.access_token) {
-                log.i(
-                    `Airbnbapi: Successful login for [${username}], auth ID is [${
-                    }]`
-                )
-                return { token: response.access_token }
-            } else {
-                log.e('Airbnbapi: no response from server when fetching token')
-                return null
-            }
-        } catch (e) {
-            // if(e.response.access_token) {
-            //     log.i('Airbnbapi: Successful login for [ ' + username + ' ], auth ID is [ ' + e.response.access_token + ' ]')
-            //     return { token: e.response.access_token }
-            // }
-            // log.i(JSON.stringify(e, null, 4))
-            log.e("Airbnbapi: Couldn't get auth token for " + username)
-            log.e(e.error)
-            return { error: e.error }
+        const response = await requestPromise(options)
+        if (response && response.access_token) {
+            log.i(
+                `Airbnbapi: Successful login for [${username}], auth ID is [${
+                    response.access_token
+                }]`
+            )
+            return { token: response.access_token }
+        } else {
+            throw Error('Airbnbapi: no response from server when fetching token')
         }
     }
 
@@ -160,21 +149,12 @@ class AirApi {
                 password
             }
         })
-        try {
-            const response = await requestPromise(options)
-            if (response && response.login) {
-                log.i(
-                    `Airbnbapi: Successful login for [${email}], auth ID is [${response.login.id}]`
-                )
-                return response
-            } else {
-                log.e('Airbnbapi: no response from server when fetching token')
-                return null
-            }
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get auth token for " + email)
-            log.e(e.error)
-            return { error: e.error }
+        const response = await requestPromise(options)
+        if (response && response.login) {
+            log.i(`Airbnbapi: Successful login for [${email}], auth ID is [${response.login.id}]`)
+            return response
+        } else {
+            throw Error('Airbnbapi: no response from server when fetching token')
         }
     }
 
@@ -197,13 +177,7 @@ class AirApi {
                 count
             }
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get public calendar for listing  " + id)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     async getCalendar({ token, id, startDate, endDate } = {}) {
@@ -230,13 +204,8 @@ class AirApi {
             },
             timeout: 10000
         })
-        try {
-            const response = await requestPromise(options).catch(console.log)
-            return response.calendar_days
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get calendar for listing " + id)
-            log.e(e)
-        }
+        const response = await requestPromise(options)
+        return response.calendar_days
     }
 
     async setPriceForDay({ token, id, date, price, currency = this.config.currency }) {
@@ -254,14 +223,9 @@ class AirApi {
             },
             timeout: 10000
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't set price for cal day for listing " + id)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
+
     async setAvailabilityForDay({ token, id, date, availability }) {
         const options = this.buildOptions({
             method: 'PUT',
@@ -273,13 +237,8 @@ class AirApi {
             },
             timeout: 10000
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't set availability for cal day for listing " + id)
-            log.e(e)
-        }
+
+        return await requestPromise(options)
     }
 
     //////////// LISTING SECTION ////////////
@@ -302,13 +261,7 @@ class AirApi {
                 listing: { house_manual: manual }
             }
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't set house manual for listing " + id)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     async getListingInfo(id) {
@@ -319,13 +272,8 @@ class AirApi {
             token: 'public',
             route: `/v1/listings/${id}`
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get info for listing  " + id)
-            log.e(e)
-        }
+        const response = await requestPromise(options)
+        return response
     }
 
     async getListingInfoHost({ token, id } = {}) {
@@ -339,13 +287,7 @@ class AirApi {
             token,
             format: 'v1_legacy_long_manage_listing'
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get listing info for id " + id)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     async getHostSummary(token) {
@@ -356,13 +298,7 @@ class AirApi {
             route: `/v1/account/host_summary`,
             token
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get a host summary for token " + token)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     async getOwnActiveListings(token) {
@@ -373,16 +309,12 @@ class AirApi {
             route: `/v1/account/host_summary`,
             token
         })
-        try {
-            const response = await requestPromise(options)
-            if (response.active_listings) {
-                return response.active_listings.map(listing => listing.listing.listing)
-            } else {
-                return []
-            }
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get an active listing list for token " + token)
-            log.e(e)
+
+        const response = await requestPromise(options)
+        if (response.active_listings) {
+            return response.active_listings.map(listing => listing.listing.listing)
+        } else {
+            return []
         }
     }
     async getOwnListings({ token, userId }) {
@@ -397,16 +329,11 @@ class AirApi {
             },
             token
         })
-        try {
-            const response = await requestPromise(options)
-            if (response) {
-                return response.listings
-            } else {
-                return []
-            }
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get an listing list for token " + token)
-            log.e(e)
+        const response = await requestPromise(options)
+        if (response) {
+            return response.listings
+        } else {
+            return []
         }
     }
 
@@ -426,13 +353,8 @@ class AirApi {
             token,
             qs: { currency }
         })
-        try {
-            const response = await requestPromise(options)
-            return response.thread
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get thread " + id)
-            log.e(e)
-        }
+        const response = await requestPromise(options)
+        return response.thread
     }
 
     async getThreadsBatch({ token, ids, currency = this.config.currency } = {}) {
@@ -461,16 +383,8 @@ class AirApi {
         })
         // log.i(JSON.stringify(options, null, 4))
 
-        let response = {}
-
-        try {
-            response = await requestPromise(options).catch(log.e)
-            return response.operations.map(o => o.response)
-            // log.i(JSON.stringify(response, null, 4))
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get threads for threads " + ids)
-            log.e(e)
-        }
+        const response = await requestPromise(options)
+        return response.operations.map(o => o.response)
     }
 
     // Gets a list of thread id's for a host
@@ -484,15 +398,10 @@ class AirApi {
             format: 'for_messaging_sync_with_posts',
             qs: { _offset: offset, _limit: limit }
         })
-        try {
-            const response = await requestPromise(options)
-            if (response.threads) {
-                return response.threads //.map(item => item.id)
-            } else return null
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get thread list for token " + token)
-            log.e(e)
-        }
+        const response = await requestPromise(options)
+        if (response.threads) {
+            return response.threads //.map(item => item.id)
+        } else return []
     }
 
     // Gets a list of thread id's for a host
@@ -509,15 +418,7 @@ class AirApi {
             token,
             format: 'for_messaging_sync_with_posts'
         })
-        try {
-            const response = await requestPromise(options)
-            if (response) {
-                return response
-            } else return null
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get thread for id " + id)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     // Gets a list of thread id's for a host
@@ -530,15 +431,10 @@ class AirApi {
             token,
             qs: { _offset: offset, _limit: limit }
         })
-        try {
-            const response = await requestPromise(options)
-            if (response.threads) {
-                return response.threads.map(item => item.id)
-            } else return null
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get thread list for token " + token)
-            log.e(e)
-        }
+        const response = await requestPromise(options)
+        if (response.threads) {
+            return response.threads.map(item => item.id)
+        } else return []
     }
 
     // Create a new thread
@@ -566,13 +462,7 @@ class AirApi {
                 checkout_date: checkOut
             }
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't send create thread for listing " + id)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     //////////// RESERVATIONS SECTION ////////////
@@ -589,13 +479,8 @@ class AirApi {
             format: 'for_mobile_host',
             qs: { _offset: offset, _limit: limit }
         })
-        try {
-            const response = await requestPromise(options)
-            return response.reservations
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get reservation list for token " + token)
-            log.e(e)
-        }
+        const response = await requestPromise(options)
+        return response.reservations
     }
 
     async getReservationsBatch({ token, ids, currency = this.config.currency } = {}) {
@@ -625,14 +510,8 @@ class AirApi {
             timeout: 30000
         })
         // log.i(JSON.stringify(options, null, 4))
-        try {
-            const response = await requestPromise(options).catch(console.error)
-            return response.operations.map(o => o.response)
-            // log.i(JSON.stringify(response, null, 4))
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get reservations for ids " + ids)
-            log.e(e)
-        }
+        const response = await requestPromise(options)
+        return response.operations.map(o => o.response)
     }
 
     async getReservation({ token, id, currency } = {}) {
@@ -647,13 +526,8 @@ class AirApi {
             format: 'for_mobile_host',
             currency
         })
-        try {
-            const response = await requestPromise(options)
-            return response.reservation
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get reservation for token " + token)
-            log.e(e)
-        }
+        const response = await requestPromise(options)
+        return response.reservation
     }
 
     // Send a message to a thread (guest)
@@ -673,13 +547,7 @@ class AirApi {
             token,
             body: { thread_id: id, message: message.trim() }
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't send message for thread " + id)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     // Send pre-approval to an inquiry
@@ -702,13 +570,7 @@ class AirApi {
                 status: 'preapproved'
             }
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't send preapproval for thread  " + thread_id)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     async sendReview({
@@ -739,13 +601,7 @@ class AirApi {
                 recommend
             }
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't send a review for thread  " + thread_id)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     async sendSpecialOffer({
@@ -788,13 +644,7 @@ class AirApi {
                 thread_id: threadId
             }
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't send a review for thread  " + thread_id)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     async alterationRequestResponse({
@@ -831,16 +681,7 @@ class AirApi {
             },
             timeout: 10000
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e(
-                "Airbnbapi: Can't send an alteration request response fro reservation " +
-                    reservationId
-            )
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     async getGuestInfo(id) {
@@ -848,13 +689,8 @@ class AirApi {
             throw Error("Airbnbapi: Can't get guest info without an id")
         }
         const options = this.buildOptions({ token: 'public', route: `/v2/users/${id}` })
-        try {
-            const response = await requestPromise(options)
-            return response && response.user ? response.user : undefined
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get guest info with user id " + id)
-            log.e(e)
-        }
+        const response = await requestPromise(options)
+        return response && response.user ? response.user : null
     }
 
     async getOwnUserInfo(token) {
@@ -862,14 +698,8 @@ class AirApi {
             throw Error("Airbnbapi: Can't get user info without a token")
         }
         const options = this.buildOptions({ route: '/v2/users/me', token })
-        try {
-            const response = await requestPromise(options)
-            return response && response.user ? response.user : undefined
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get own info with token" + token)
-            log.e(e)
-            return null
-        }
+        const response = await requestPromise(options)
+        return response && response.user ? response.user : null
     }
 
     async listingSearch({
@@ -924,13 +754,7 @@ class AirApi {
                 sort: sortDirection
             }
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't get listings for search of " + location)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 
     async newAccount({
@@ -970,13 +794,7 @@ class AirApi {
                 'user_profile_info[receive_promotional_email]': 0
             }
         })
-        try {
-            const response = await requestPromise(options)
-            return response
-        } catch (e) {
-            log.e("Airbnbapi: Couldn't make new account for username " + username)
-            log.e(e)
-        }
+        return await requestPromise(options)
     }
 }
 
