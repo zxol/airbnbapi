@@ -91,8 +91,7 @@ class AirApi {
     // Ping server to see if the token is good.
     async testAuth(token) {
         if (!(token || this.config.token)) {
-            log.i('Airbnbapi: No token included for testAuth() call')
-            return null
+            throw Error('Airbnbapi: No token included for testAuth() call')
         } else {
             const options = this.buildOptions({
                 method: 'POST',
@@ -107,11 +106,9 @@ class AirApi {
     // Grab a new auth token using a 'username and password' login method.
     async newAccessToken({ username, password } = {}) {
         if (!username) {
-            log.e("Airbnbapi: Can't apply for a token without a username.")
-            return null
+            throw Error("Airbnbapi: Can't apply for a token without a username.")
         } else if (!password) {
-            log.e("Airbnbapi: Can't apply for a token without a password.")
-            return null
+            throw Error("Airbnbapi: Can't apply for a token without a password.")
         }
         const options = this.buildOptions({
             token: 'public',
@@ -129,7 +126,6 @@ class AirApi {
             if (response && response.access_token) {
                 log.i(
                     `Airbnbapi: Successful login for [${username}], auth ID is [${
-                        response.access_token
                     }]`
                 )
                 return { token: response.access_token }
@@ -151,11 +147,9 @@ class AirApi {
 
     async login({ email, password } = {}) {
         if (!email) {
-            log.e("Airbnbapi: Can't login without an email.")
-            return null
+            throw Error("Airbnbapi: Can't login without an email.")
         } else if (!password) {
-            log.e("Airbnbapi: Can't apply for a token without a password.")
-            return null
+            throw Error("Airbnbapi: Can't apply for a token without a password.")
         }
         const options = this.buildOptions({
             token: 'public',
@@ -190,8 +184,7 @@ class AirApi {
 
     async getPublicListingCalendar({ id, month = '1', year = '2018', count = '1' } = {}) {
         if (!id) {
-            log.e("Airbnbapi: Can't get public listing calendar without an id")
-            return null
+            throw Error("Airbnbapi: Can't get public listing calendar without an id")
         }
         const options = this.buildOptions({
             token: 'public',
@@ -216,17 +209,13 @@ class AirApi {
     async getCalendar({ token, id, startDate, endDate } = {}) {
         //log.i(colors.magenta('Airbnbapi: Requesting calendar for [ ' + id + ' ] --'))
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get a calendar without a token")
-            return null
+            throw Error("Airbnbapi: Can't get a calendar without a token")
         } else if (!id) {
-            log.e("Airbnbapi: Can't get a calendar without an id")
-            return null
+            throw Error("Airbnbapi: Can't get a calendar without an id")
         } else if (!startDate) {
-            log.e("Airbnbapi: Can't get a calendar without a start date")
-            return null
+            throw Error("Airbnbapi: Can't get a calendar without a start date")
         } else if (!endDate) {
-            log.e("Airbnbapi: Can't get a calendar without a end date")
-            return null
+            throw Error("Airbnbapi: Can't get a calendar without a end date")
         }
 
         const options = this.buildOptions({
@@ -299,14 +288,11 @@ class AirApi {
 
     async setHouseManual({ token, id, manual } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't set a house manual without a token")
-            return null
+            throw Error("Airbnbapi: Can't set a house manual without a token")
         } else if (!id) {
-            log.e("Airbnbapi: Can't set a house manual without an id")
-            return null
+            throw Error("Airbnbapi: Can't set a house manual without an id")
         } else if (!manual) {
-            log.e("Airbnbapi: Can't set a house manual without manual text")
-            return null
+            throw Error("Airbnbapi: Can't set a house manual without manual text")
         }
         const options = this.buildOptions({
             method: 'POST',
@@ -327,8 +313,7 @@ class AirApi {
 
     async getListingInfo(id) {
         if (!id) {
-            log.e("Airbnbapi: Can't get public listing information without an id")
-            return null
+            throw Error("Airbnbapi: Can't get public listing information without an id")
         }
         const options = this.buildOptions({
             token: 'public',
@@ -345,11 +330,9 @@ class AirApi {
 
     async getListingInfoHost({ token, id } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get a listing without a token")
-            return null
+            throw Error("Airbnbapi: Can't get a listing without a token")
         } else if (!id) {
-            log.e("Airbnbapi: Can't get a listing without an id")
-            return null
+            throw Error("Airbnbapi: Can't get a listing without an id")
         }
         const options = this.buildOptions({
             route: `/v1/listings/${id}`,
@@ -367,8 +350,7 @@ class AirApi {
 
     async getHostSummary(token) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get a summary without a token")
-            return null
+            throw Error("Airbnbapi: Can't get a summary without a token")
         }
         const options = this.buildOptions({
             route: `/v1/account/host_summary`,
@@ -385,8 +367,7 @@ class AirApi {
 
     async getOwnActiveListings(token) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get an active listing list without a token")
-            return null
+            throw Error("Airbnbapi: Can't get an active listing list without a token")
         }
         const options = this.buildOptions({
             route: `/v1/account/host_summary`,
@@ -406,8 +387,7 @@ class AirApi {
     }
     async getOwnListings({ token, userId }) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get an listing list without a token")
-            return null
+            throw Error("Airbnbapi: Can't get an listing list without a token")
         }
         const options = this.buildOptions({
             route: `/v2/listings`,
@@ -437,11 +417,9 @@ class AirApi {
     // Gets all the data for one thread
     async getThread({ token, id, currency = this.config.currency } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get a thread without a token")
-            return null
+            throw Error("Airbnbapi: Can't get a thread without a token")
         } else if (!id) {
-            log.e("Airbnbapi: Can't get a thread without an id")
-            return null
+            throw Error("Airbnbapi: Can't get a thread without an id")
         }
         const options = this.buildOptions({
             route: '/v1/threads/' + id,
@@ -460,11 +438,9 @@ class AirApi {
     async getThreadsBatch({ token, ids, currency = this.config.currency } = {}) {
         //log.i(colors.magenta('Airbnbapi: Requesting calendar for [ ' + id + ' ] --'))
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get threads without a token")
-            return null
+            throw Error("Airbnbapi: Can't get threads without a token")
         } else if (!ids) {
-            log.e("Airbnbapi: Can't get threads without at least one id")
-            return null
+            throw Error("Airbnbapi: Can't get threads without at least one id")
         }
 
         const operations = ids.map(id => ({
@@ -500,8 +476,7 @@ class AirApi {
     // Gets a list of thread id's for a host
     async getThreadsFull({ token, offset = '0', limit = '2' } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get a thread list without a token")
-            return null
+            throw Error("Airbnbapi: Can't get a thread list without a token")
         }
         const options = this.buildOptions({
             route: '/v2/threads',
@@ -523,12 +498,10 @@ class AirApi {
     // Gets a list of thread id's for a host
     async getThreadFull({ token, id } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get a thread without a token")
-            return null
+            throw Error("Airbnbapi: Can't get a thread without a token")
         }
         if (!id) {
-            log.e("Airbnbapi: Can't get a thread without an id")
-            return null
+            throw Error("Airbnbapi: Can't get a thread without an id")
         }
 
         const options = this.buildOptions({
@@ -550,8 +523,7 @@ class AirApi {
     // Gets a list of thread id's for a host
     async getThreads({ token, offset = '0', limit = '2' } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get a thread list without a token")
-            return null
+            throw Error("Airbnbapi: Can't get a thread list without a token")
         }
         const options = this.buildOptions({
             route: '/v2/threads',
@@ -572,20 +544,15 @@ class AirApi {
     // Create a new thread
     async createThread({ token, id, checkIn, checkOut, guestNum = 1, message } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't create a thread without a token")
-            return null
+            throw Error("Airbnbapi: Can't create a thread without a token")
         } else if (!id) {
-            log.e("Airbnbapi: Can't create a thread without an id")
-            return null
+            throw Error("Airbnbapi: Can't create a thread without an id")
         } else if (!checkIn) {
-            log.e("Airbnbapi: Can't create a thread without a checkin")
-            return null
+            throw Error("Airbnbapi: Can't create a thread without a checkin")
         } else if (!checkOut) {
-            log.e("Airbnbapi: Can't create a thread without a checkout")
-            return null
+            throw Error("Airbnbapi: Can't create a thread without a checkout")
         } else if (!message || message.trim() === '') {
-            log.e("Airbnbapi: Can't create a thread without a message body")
-            return null
+            throw Error("Airbnbapi: Can't create a thread without a message body")
         }
         const options = this.buildOptions({
             method: 'POST',
@@ -614,8 +581,7 @@ class AirApi {
 
     async getReservations({ token, offset = '0', limit = '20' } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get a reservation list without a token")
-            return null
+            throw Error("Airbnbapi: Can't get a reservation list without a token")
         }
         const options = this.buildOptions({
             route: '/v2/reservations',
@@ -636,11 +602,9 @@ class AirApi {
         // TODO change to reservation
         //log.i(colors.magenta('Airbnbapi: Requesting calendar for [ ' + id + ' ] --'))
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get reservations without a token")
-            return null
+            throw Error("Airbnbapi: Can't get reservations without a token")
         } else if (!ids || !Array.isArray(ids)) {
-            log.e("Airbnbapi: Can't get reservations without at least one id")
-            return null
+            throw Error("Airbnbapi: Can't get reservations without at least one id")
         }
         const operations = ids.map(id => ({
             method: 'GET',
@@ -673,11 +637,9 @@ class AirApi {
 
     async getReservation({ token, id, currency } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get a reservation without a token")
-            return null
+            throw Error("Airbnbapi: Can't get a reservation without a token")
         } else if (!id) {
-            log.e("Airbnbapi: Can't get a reservation without an id")
-            return null
+            throw Error("Airbnbapi: Can't get a reservation without an id")
         }
         const options = this.buildOptions({
             route: `/v2/reservations/${id}`,
@@ -697,14 +659,11 @@ class AirApi {
     // Send a message to a thread (guest)
     async sendMessage({ token, id, message } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't send a message without a token")
-            return null
+            throw Error("Airbnbapi: Can't send a message without a token")
         } else if (!id) {
-            log.e("Airbnbapi: Can't send a message without an id")
-            return null
+            throw Error("Airbnbapi: Can't send a message without an id")
         } else if (!message || message.trim() === '') {
-            log.e("Airbnbapi: Can't send a message without a message body")
-            return null
+            throw Error("Airbnbapi: Can't send a message without a message body")
         }
         log.i('Airbnbapi: send message for thread: ' + id + ' --')
         log.i("'" + message.substring(70) + "'")
@@ -727,14 +686,11 @@ class AirApi {
     // requires a id. id, and optional message
     async sendPreApproval({ token, thread_id, listing_id, message = '' } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't send pre-approval without a token")
-            return null
+            throw Error("Airbnbapi: Can't send pre-approval without a token")
         } else if (!thread_id) {
-            log.e("Airbnbapi: Can't send pre-approval without a thread_id")
-            return null
+            throw Error("Airbnbapi: Can't send pre-approval without a thread_id")
         } else if (!listing_id) {
-            log.e("Airbnbapi: Can't send pre-approval without a listing_id")
-            return null
+            throw Error("Airbnbapi: Can't send pre-approval without a listing_id")
         }
         const options = this.buildOptions({
             method: 'POST',
@@ -766,11 +722,9 @@ class AirApi {
         recommend = true
     } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't send a review without a token")
-            return null
+            throw Error("Airbnbapi: Can't send a review without a token")
         } else if (!id) {
-            log.e("Airbnbapi: Can't send review without an id")
-            return null
+            throw Error("Airbnbapi: Can't send review without an id")
         }
         const options = this.buildOptions({
             method: 'POST',
@@ -805,26 +759,19 @@ class AirApi {
         currency = this.config.currency
     } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't send a special offer without a token")
-            return null
+            throw Error("Airbnbapi: Can't send a special offer without a token")
         } else if (!startDate) {
-            log.e("Airbnbapi: Can't send a special offer without a startDate")
-            return null
+            throw Error("Airbnbapi: Can't send a special offer without a startDate")
         } else if (!guests) {
-            log.e("Airbnbapi: Can't send a special offer without guests")
-            return null
+            throw Error("Airbnbapi: Can't send a special offer without guests")
         } else if (!listingId) {
-            log.e("Airbnbapi: Can't send a special offer without a listingId")
-            return null
+            throw Error("Airbnbapi: Can't send a special offer without a listingId")
         } else if (!nights) {
-            log.e("Airbnbapi: Can't send a special offer without nights (staying)")
-            return null
+            throw Error("Airbnbapi: Can't send a special offer without nights (staying)")
         } else if (!price) {
-            log.e("Airbnbapi: Can't send a special offer without a price")
-            return null
+            throw Error("Airbnbapi: Can't send a special offer without a price")
         } else if (!threadId) {
-            log.e("Airbnbapi: Can't send a special offer without a threadId")
-            return null
+            throw Error("Airbnbapi: Can't send a special offer without a threadId")
         }
 
         const options = this.buildOptions({
@@ -898,8 +845,7 @@ class AirApi {
 
     async getGuestInfo(id) {
         if (!id) {
-            log.e("Airbnbapi: Can't get guest info without an id")
-            return null
+            throw Error("Airbnbapi: Can't get guest info without an id")
         }
         const options = this.buildOptions({ token: 'public', route: `/v2/users/${id}` })
         try {
@@ -913,8 +859,7 @@ class AirApi {
 
     async getOwnUserInfo(token) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't get user info without a token")
-            return null
+            throw Error("Airbnbapi: Can't get user info without a token")
         }
         const options = this.buildOptions({ route: '/v2/users/me', token })
         try {
@@ -999,20 +944,15 @@ class AirApi {
         bdayYear = 1980
     } = {}) {
         if (!username) {
-            log.e("Airbnbapi: Can't make a new account without a username")
-            return null
+            throw Error("Airbnbapi: Can't make a new account without a username")
         } else if (!password) {
-            log.e("Airbnbapi: Can't make a new account without a password")
-            return null
+            throw Error("Airbnbapi: Can't make a new account without a password")
         } else if (!authenticity_token) {
-            log.e("Airbnbapi: Can't make a new account without an authenticity_token")
-            return null
+            throw Error("Airbnbapi: Can't make a new account without an authenticity_token")
         } else if (!authenticity_token) {
-            log.e("Airbnbapi: Can't make a new account without a firstname")
-            return null
+            throw Error("Airbnbapi: Can't make a new account without a firstname")
         } else if (!authenticity_token) {
-            log.e("Airbnbapi: Can't make a new account without a lastname")
-            return null
+            throw Error("Airbnbapi: Can't make a new account without a lastname")
         }
         const options = this.buildOptions({
             method: 'POST',
