@@ -36,7 +36,7 @@ class AirApi {
         uri,
         json = true,
         headers,
-        currency = 'JPY',
+        currency = this.config.currency,
         format,
         qs,
         body,
