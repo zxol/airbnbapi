@@ -750,6 +750,32 @@ class AirApi {
         }
     }
 
+    async acceptReservation({ token, reservation_id } = {}) {
+        if (!(token || this.config.token)) {
+            _log2.default.e("Airbnbapi: Can't accept reservation without a token");
+            return null;
+        } else if (!reservation_id) {
+            _log2.default.e("Airbnbapi: Can't accept reservation without a reservation_id");
+            return null;
+        }
+        const options = this.buildOptions({
+            method: 'POST',
+            route: `/v1/reservations/${reservation_id}/update`,
+            token,
+            body: {
+                status: 'accepted',
+                verified: true
+            }
+        });
+        try {
+            const response = await (0, _requestPromise2.default)(options);
+            return response;
+        } catch (e) {
+            _log2.default.e("Airbnbapi: Couldn't accept reservation " + reservation_id);
+            _log2.default.e(e);
+        }
+    }
+
     // Send a message to a thread (guest)
     async sendMessage({ token, id, message } = {}) {
         if (!(token || this.config.token)) {

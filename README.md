@@ -383,6 +383,18 @@ airbnb.getReservationsBatch({
 // returns an array of reservations in the new format (JSON)
 ```
 
+### acceptReservation
+
+Accept a reservation.
+
+```js
+airbnb.acceptReservation({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    reservation_id: 98769876
+})
+// returns confirmation
+```
+
 ---
 
 ## POSTING

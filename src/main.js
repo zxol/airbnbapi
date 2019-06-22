@@ -747,6 +747,32 @@ class AirApi {
         }
     }
 
+    async acceptReservation({ token, reservation_id } = {}) {
+        if (!(token || this.config.token)) {
+            log.e("Airbnbapi: Can't accept reservation without a token")
+            return null
+        } else if (!reservation_id) {
+            log.e("Airbnbapi: Can't accept reservation without a reservation_id")
+            return null
+        }
+        const options = this.buildOptions({
+            method: 'POST',
+            route: `/v1/reservations/${reservation_id}/update`,
+            token,
+            body: {
+                status: 'accepted',
+                verified: true
+            }
+        })
+        try {
+            const response = await requestPromise(options)
+            return response
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't accept reservation " + reservation_id)
+            log.e(e)
+        }
+    }
+
     // Send a message to a thread (guest)
     async sendMessage({ token, id, message } = {}) {
         if (!(token || this.config.token)) {
