@@ -409,6 +409,27 @@ class AirApi {
             if (response.rooms_listings) {
                 listings = response.rooms_listings
             }
+            if (
+                offset == 0 &&
+                response &&
+                response.metadata &&
+                response.metadata.total_listing_count > limit
+            ) {
+                var start = limit
+                var total = response.metadata.total_listing_count
+                while (listings.length < total && start < total) {
+                    listings = listings.concat(
+                        await this.getOwnActiveListings({ token, offset: start, limit })
+                    )
+                    if (listings.length < limit + start) {
+                        // stop iterating once we hit unlisted listings
+                        // e.g. if we limit at 25, and we have 49 listings, that means
+                        // that the 50th listing was unlisted, and we can break now
+                        break
+                    }
+                    start += limit
+                }
+            }
             return listings.filter(function(listing) {
                 return listing.listing_state == 'active'
             })
