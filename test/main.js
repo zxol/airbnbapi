@@ -279,7 +279,14 @@ describe('airbnbapi', () => {
             expect(await testFunc()).to.be.null
         })
         nockauth()
-        .get('/v1/account/host_summary')
+        .get('/v2/rooms_listings')
+        .query({
+            _order_field: "status",
+            _order_type: "ASC",
+            _limit: 20,
+            _offset: 0,
+            _format: "default"
+        })
         .query(true)
         .reply(200, {active_listings: dummyData.getOwnActiveListings})
 
