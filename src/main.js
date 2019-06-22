@@ -404,7 +404,7 @@ class AirApi {
             log.e(e)
         }
     }
-    async getOwnListings({ token, userId }) {
+    async getOwnListings({ token, userId, offset = 0, limit = 20 }) {
         if (!(token || this.config.token)) {
             log.e("Airbnbapi: Can't get an listing list without a token")
             return null
@@ -413,7 +413,9 @@ class AirApi {
             route: `/v2/listings`,
             format: `v1_legacy_long`,
             qs: {
-                user_id: userId
+                user_id: userId,
+                _offset: offset,
+                _limit: limit
             },
             token
         })
