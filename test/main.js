@@ -259,7 +259,7 @@ describe('airbnbapi', () => {
         })
     })
 
-    describe('#getOwnActiveListings(token)', () => {
+    describe('#getOwnActiveListings({token, offset, limit})', () => {
         console.log(JSON.stringify(dummyData.getOwnActiveListings, null, 4))
         const testFunc = abba.getOwnActiveListings.bind(abba)
         it('should return null if no arguments are passed or arguments are missing', async () => {
