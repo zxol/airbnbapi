@@ -383,22 +383,35 @@ class AirApi {
         }
     }
 
-    async getOwnActiveListings(token) {
+    async getOwnActiveListings({ token, offset = 0, limit = 25 } = {}) {
         if (!(token || this.config.token)) {
             log.e("Airbnbapi: Can't get an active listing list without a token")
             return null
         }
+        if (limit && limit > 25) {
+            log.e('Airbnbapi: Limit can only be up to 25')
+            return null
+        }
         const options = this.buildOptions({
-            route: `/v1/account/host_summary`,
+            route: `/v2/rooms_listings`,
+            format: `default`,
+            qs: {
+                _order_field: 'status',
+                _order_type: 'ASC',
+                _offset: offset,
+                _limit: limit
+            },
             token
         })
         try {
+            var listings = []
             const response = await requestPromise(options)
-            if (response.active_listings) {
-                return response.active_listings.map(listing => listing.listing.listing)
-            } else {
-                return []
+            if (response.rooms_listings) {
+                listings = response.rooms_listings
             }
+            return listings.filter(function(listing) {
+                return listing.listing_state == 'active'
+            })
         } catch (e) {
             log.e("Airbnbapi: Couldn't get an active listing list for token " + token)
             log.e(e)

@@ -251,7 +251,11 @@ airbnb.getHostSummary('faketoken3sDdfvtF9if5398j0v5nui')
 Gets an array containing a host's active listings
 
 ```js
-airbnb.getOwnActiveListings('faketoken3sDdfvtF9if5398j0v5nui')
+airbnb.getOwnActiveListings({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    offset: 0,
+    limit: 20
+})
 // returns listing array for your account (JSON)
 ```
 
