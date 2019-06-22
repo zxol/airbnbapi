@@ -391,28 +391,55 @@ class AirApi {
         }
     }
 
-    async getOwnActiveListings(token) {
+    async getOwnActiveListings({ token, offset = 0, limit = 25 } = {}) {
         if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get an active listing list without a token");
             return null;
         }
+        if (limit && limit > 25) {
+            _log2.default.e('Airbnbapi: Limit can only be up to 25');
+            return null;
+        }
         const options = this.buildOptions({
-            route: `/v1/account/host_summary`,
+            route: `/v2/rooms_listings`,
+            format: `default`,
+            qs: {
+                _order_field: 'status',
+                _order_type: 'ASC',
+                _offset: offset,
+                _limit: limit
+            },
             token
         });
         try {
+            var listings = [];
             const response = await (0, _requestPromise2.default)(options);
-            if (response.active_listings) {
-                return response.active_listings.map(listing => listing.listing.listing);
-            } else {
-                return [];
+            if (response.rooms_listings) {
+                listings = response.rooms_listings;
             }
+            if (offset == 0 && response && response.metadata && response.metadata.total_listing_count > limit) {
+                var start = limit;
+                var total = response.metadata.total_listing_count;
+                while (listings.length < total && start < total) {
+                    listings = listings.concat((await this.getOwnActiveListings({ token, offset: start, limit })));
+                    if (listings.length < limit + start) {
+                        // stop iterating once we hit unlisted listings
+                        // e.g. if we limit at 25, and we have 49 listings, that means
+                        // that the 50th listing was unlisted, and we can break now
+                        break;
+                    }
+                    start += limit;
+                }
+            }
+            return listings.filter(function (listing) {
+                return listing.listing_state == 'active';
+            });
         } catch (e) {
             _log2.default.e("Airbnbapi: Couldn't get an active listing list for token " + token);
             _log2.default.e(e);
         }
     }
-    async getOwnListings({ token, userId }) {
+    async getOwnListings({ token, userId, offset = 0, limit = 20 }) {
         if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get an listing list without a token");
             return null;
@@ -421,7 +448,9 @@ class AirApi {
             route: `/v2/listings`,
             format: `v1_legacy_long`,
             qs: {
-                user_id: userId
+                user_id: userId,
+                _offset: offset,
+                _limit: limit
             },
             token
         });

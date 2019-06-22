@@ -128,9 +128,7 @@ class AirApi {
             const response = await requestPromise(options)
             if (response && response.access_token) {
                 log.i(
-                    `Airbnbapi: Successful login for [${username}], auth ID is [${
-                        response.access_token
-                    }]`
+                    `Airbnbapi: Successful login for [${username}], auth ID is [${response.access_token}]`
                 )
                 return { token: response.access_token }
             } else {
