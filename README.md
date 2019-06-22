@@ -237,6 +237,19 @@ airbnb.getListingInfoHost({
 // returns extended listing info for your listing (JSON)
 ```
 
+### setListingAvailability
+
+Activate or deactive listings.
+
+```js
+airbnb.setListingAvailability({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    listing_id: 109834757,
+    availability: true // or false
+})
+// returns a result of the operation
+```
+
 ### getHostSummary
 
 Gets an object containing a host's active listings, alerts, and upcoming reservations

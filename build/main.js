@@ -373,6 +373,25 @@ class AirApi {
         }
     }
 
+    async setListingAvailability({ token, listing_id, availability }) {
+        const options = this.buildOptions({
+            method: 'PUT',
+            uri: `https://api.airbnb.com/v2/listings/${listing_id}`,
+            token,
+            body: {
+                has_availability: availability
+            },
+            timeout: 10000
+        });
+        try {
+            const response = await (0, _requestPromise2.default)(options);
+            return response;
+        } catch (e) {
+            _log2.default.e("Airbnbapi: Couldn't set listing availability for listing " + listing_id);
+            _log2.default.e(e);
+        }
+    }
+
     async getHostSummary(token) {
         if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a summary without a token");

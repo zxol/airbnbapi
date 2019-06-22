@@ -244,6 +244,19 @@ describe('airbnbapi', () => {
         })
     })
 
+    describe('#setListingAvailability({token, listing_id, availability}))', () => {
+        const testFunc = abba.setListingAvailability.bind(abba)
+        nockauth()
+        .put('/v2/listings/1234', {
+            has_availability: true
+        })
+        .query(true)
+        .reply(200, {response: 'success'})
+        it('should return result object for correct arguments', async () => {
+            expect(await testFunc({token:'mockcorrecttoken', listing_id:1234, availability:true})).to.be.an('object')
+        })
+    })
+
     describe('#getHostSummary(token)', () => {
         const testFunc = abba.getHostSummary.bind(abba)
         it('should return null if no arguments are passed or arguments are missing', async () => {
