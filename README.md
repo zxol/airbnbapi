@@ -395,6 +395,19 @@ airbnb.acceptReservation({
 // returns confirmation
 ```
 
+### declineReservation
+
+Decline a reservation with reason that dates are not available.
+
+```js
+airbnb.declineReservation({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    reservation_id: 98769876,
+    message: ''
+})
+// returns decline confirmation
+```
+
 ---
 
 ## POSTING

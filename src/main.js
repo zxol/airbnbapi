@@ -773,6 +773,37 @@ class AirApi {
         }
     }
 
+    async declineReservation({ token, reservation_id, message = '' } = {}) {
+        if (!(token || this.config.token)) {
+            log.e("Airbnbapi: Can't decline reservation without a token")
+            return null
+        } else if (!reservation_id) {
+            log.e("Airbnbapi: Can't decline reservation without a reservation_id")
+            return null
+        }
+        const options = this.buildOptions({
+            method: 'PUT',
+            route: `/v2/reservations/${reservation_id}`,
+            token,
+            format: 'for_mobile_host_rejection',
+            qs: { _intents: 'accept_decline_booking' },
+            body: {
+                status: 'declined',
+                decline_block_dates: true,
+                decline_message_to_guest: message,
+                status_code: 2,
+                decline_reason: 'dates_not_available'
+            }
+        })
+        try {
+            const response = await requestPromise(options)
+            return response
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't decline reservation " + reservation_id)
+            log.e(e)
+        }
+    }
+
     // Send a message to a thread (guest)
     async sendMessage({ token, id, message } = {}) {
         if (!(token || this.config.token)) {
