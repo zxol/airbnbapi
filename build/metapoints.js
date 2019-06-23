@@ -22,5 +22,19 @@ exports.default = {
             return this.getListingInfoHost({ token, id: listing.id });
         }));
         return fullListings;
+    },
+    async mGetAllOwnActiveListings(token) {
+        if (!token) {
+            _log2.default.e("Airbnbapi: Can't get an active listing list without a token");
+            return null;
+        }
+        var start = 0;
+        var limit = 25;
+        var listings = await this.getOwnActiveListings({ token, offset: start, limit: limit });
+        while (listings.length == start + limit) {
+            start += limit;
+            listings = listings.concat((await this.getOwnActiveListings({ token, offset: start, limit })));
+        }
+        return listings;
     }
 };
