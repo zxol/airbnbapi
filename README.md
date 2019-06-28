@@ -250,6 +250,19 @@ airbnb.setListingAvailability({
 // returns a result of the operation
 ```
 
+### setListingInstabook
+
+Activate or deactive instabook for a listing.
+
+```js
+airbnb.setListingInstabook({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    listing_id: 109834757,
+    enabled: true // or false
+})
+// returns a result of the operation
+```
+
 ### getHostSummary
 
 Gets an object containing a host's active listings, alerts, and upcoming reservations

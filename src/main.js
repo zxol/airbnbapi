@@ -384,6 +384,26 @@ class AirApi {
         }
     }
 
+    async setListingInstabook({ token, listing_id, enabled }) {
+        const options = this.buildOptions({
+            method: 'PUT',
+            uri: `https://api.airbnb.com/v2/listings/${listing_id}`,
+            token,
+            format: 'for_lys_mobile',
+            body: {
+                instant_booking_allowed_category: enabled ? 'everyone' : 'off'
+            },
+            timeout: 10000
+        })
+        try {
+            const response = await requestPromise(options)
+            return response
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't set listing availability for listing " + listing_id)
+            log.e(e)
+        }
+    }
+
     async getHostSummary(token) {
         if (!(token || this.config.token)) {
             log.e("Airbnbapi: Can't get a summary without a token")
