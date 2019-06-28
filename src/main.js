@@ -18,6 +18,7 @@ class AirApi {
         route = '/v2/batch',
         uri,
         json = true,
+        gzip = true,
         headers,
         currency = this.config.currency,
         format,
@@ -30,6 +31,7 @@ class AirApi {
             method,
             uri: uri || this.config.domain + route,
             json,
+            gzip,
             headers: {
                 ...this.config.default_headers,
                 'X-Airbnb-OAuth-Token': token === 'public' ? '' : this.config.token || token,
