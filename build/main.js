@@ -482,6 +482,51 @@ class AirApi {
         }
     }
 
+    async getListingsPerformance({
+        token,
+        startDate,
+        endDate,
+        offset = 0,
+        limit = 7,
+        datatypes = ['NIGHTS_BOOKED']
+    } = {}) {
+        if (!(token || this.config.token)) {
+            _log2.default.e("Airbnbapi: Can't get listings performance without a token");
+            return null;
+        }
+        if (!startDate || typeof startDate != 'string') {
+            _log2.default.e("Airbnbapi: Can't get a performance data without a start date ( ISOString )");
+            return null;
+        } else if (!endDate || typeof endDate != 'string') {
+            _log2.default.e("Airbnbapi: Can't get a performance data without an end date ( ISOString )");
+            return null;
+        }
+        const options = this.buildOptions({
+            method: 'POST',
+            route: `/v2/get_host_performance_table_data`,
+            body: {
+                performanceDataTypes: datatypes,
+                listingIds: [],
+                listingSearchFields: { filters: {} },
+                dsStart: startDate, // iso
+                dsEnd: endDate, // iso
+                offset: offset,
+                limit: limit
+            },
+            token
+        });
+        try {
+            const response = await (0, _requestPromise2.default)(options);
+            if (response.rows) {
+                return response.rows;
+            }
+            throw response;
+        } catch (e) {
+            _log2.default.e("Airbnbapi: Couldn't get a listings performance for token " + token);
+            _log2.default.e(e);
+        }
+    }
+
     async getOwnActiveListings({ token, offset = 0, limit = 25 } = {}) {
         if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get an active listing list without a token");

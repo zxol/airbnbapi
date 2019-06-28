@@ -301,6 +301,24 @@ airbnb.getHostSummary('faketoken3sDdfvtF9if5398j0v5nui')
 // returns host summary info for your account (JSON)
 ```
 
+### getListingsPerformance
+
+Gets performance data such as `NIGHTS_BOOKED`, `OCCUPANCY_RATE_MARKET`, `OCCUPANCY_RATE` and `OCCUPANCY_RATE_YOY`. Defaults to `NIGHTS_BOOKED` only.
+
+Note : If you check data over longer time spans - e.g. over the last year - and are getting errors - then remove `OCCUPANCY_RATE_YOY`, or try with `NIGHTS_BOOKED` only.
+
+```js
+airbnb.getListingsPerformance({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    startDate: '2018-01-01',
+    endDate: '2018-02-28',
+    offset: 0,
+    limit: 7,
+    datatypes: ['NIGHTS_BOOKED']
+})
+// returns performance info for all listings in host account
+```
+
 ### getOwnActiveListings
 
 Gets an array containing a host's active listings
