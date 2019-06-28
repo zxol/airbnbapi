@@ -180,6 +180,20 @@ airbnb.setAvailabilityForDay({
 // returns a result of the operation
 ```
 
+### setBasePrice
+
+Set base price of a listing.
+
+```js
+airbnb.setBasePrice({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    listing_id: 109834757,
+    daily_price: 68,
+    currency: 'USD'
+})
+// returns a result of the operation
+```
+
 ---
 
 ## LISTINGS

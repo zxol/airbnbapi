@@ -302,7 +302,27 @@ class AirApi {
             _log2.default.e(e);
         }
     }
-
+    async setBasePrice({ token, listing_id, daily_price, currency = this.config.currency }) {
+        const options = this.buildOptions({
+            method: 'PUT',
+            uri: `https://api.airbnb.com/v2/listings/${listing_id}`,
+            token,
+            currency,
+            format: 'for_lys_mobile',
+            body: {
+                listing_price: daily_price,
+                listing_currency: currency
+            },
+            timeout: 10000
+        });
+        try {
+            const response = await (0, _requestPromise2.default)(options);
+            return response;
+        } catch (e) {
+            _log2.default.e("Airbnbapi: Couldn't set listing price for listing " + listing_id);
+            _log2.default.e(e);
+        }
+    }
     //////////// LISTING SECTION ////////////
     //////////// LISTING SECTION ////////////
     //////////// LISTING SECTION ////////////
