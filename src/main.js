@@ -313,6 +313,38 @@ class AirApi {
             log.e(e)
         }
     }
+    async setPriceForDates({
+        token,
+        listing_id,
+        dates,
+        daily_price,
+        currency = this.config.currency
+    }) {
+        const options = this.buildOptions({
+            method: 'POST',
+            uri: `https://api.airbnb.com/v2/calendar_operations/`,
+            token,
+            currency,
+            body: {
+                method: 'UPDATE',
+                listing_id: listing_id,
+                operations: [
+                    {
+                        dates: [dates],
+                        daily_price: daily_price
+                    }
+                ]
+            },
+            timeout: 10000
+        })
+        try {
+            const response = await requestPromise(options)
+            return response
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't set price for cal day for listing " + listing_id)
+            log.e(e)
+        }
+    }
     //////////// LISTING SECTION ////////////
     //////////// LISTING SECTION ////////////
     //////////// LISTING SECTION ////////////

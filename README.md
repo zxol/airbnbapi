@@ -194,6 +194,21 @@ airbnb.setBasePrice({
 // returns a result of the operation
 ```
 
+### setPriceForDates
+
+Sets the price of a listing for a specific date range.
+
+```js
+airbnb.setPriceForDates({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    listing_id: 109834757,
+    dates: '2019-12-20:2019-12-30',
+    daily_price: 98,
+    currency: 'USD'
+})
+// returns a result of the operation
+```
+
 ---
 
 ## LISTINGS
