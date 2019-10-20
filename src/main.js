@@ -128,9 +128,7 @@ class AirApi {
             const response = await requestPromise(options)
             if (response && response.access_token) {
                 log.i(
-                    `Airbnbapi: Successful login for [${username}], auth ID is [${
-                        response.access_token
-                    }]`
+                    `Airbnbapi: Successful login for [${username}], auth ID is [${response.access_token}]`
                 )
                 return { token: response.access_token }
             } else {
@@ -426,6 +424,75 @@ class AirApi {
             }
         } catch (e) {
             log.e("Airbnbapi: Couldn't get an listing list for token " + token)
+            log.e(e)
+        }
+    }
+
+    //////////// WISHLISTS SECTION ////////////
+    //////////// WISHLISTS SECTION ////////////
+    //////////// WISHLISTS SECTION ////////////
+
+    async getWishlists({ token, include_shared = true, offset = '0', limit = '30' } = {}) {
+        if (!(token || this.config.token)) {
+            log.e("Airbnbapi: Can't get a wishlist without a token")
+            return null
+        }
+        const options = this.buildOptions({
+            route: '/v2/wishlists',
+            token,
+            qs: { _offset: offset, _limit: limit, include_shared_wishlists: include_shared }
+        })
+
+        try {
+            const response = await requestPromise(options)
+            return response.wishlists
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't get wishlists")
+            log.e(e)
+        }
+    }
+
+    async getWishlist({ token, id } = {}) {
+        if (!(token || this.config.token)) {
+            log.e("Airbnbapi: Can't get a wishlist without a token")
+            return null
+        } else if (!id) {
+            log.e("Airbnbapi: Can't get a wishlist without an id")
+            return null
+        }
+        const options = this.buildOptions({
+            route: '/v2/wishlists/' + id,
+            token,
+            format: 'for_web_save_modal'
+        })
+        try {
+            const response = await requestPromise(options)
+            return response.wishlist
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't get wishlist " + id)
+            log.e(e)
+        }
+    }
+
+    async getWishlistedListings({ token, id, offset = '0', limit = '30' } = {}) {
+        if (!(token || this.config.token)) {
+            log.e("Airbnbapi: Can't get a wishlist without a token")
+            return null
+        } else if (!id) {
+            log.e("Airbnbapi: Can't get a wishlist without an id")
+            return null
+        }
+        const options = this.buildOptions({
+            route: '/v2/wishlisted_listings?wishlist_id=' + id,
+            token,
+            format: 'for_collaborator',
+            qs: { _offset: offset, _limit: limit }
+        })
+        try {
+            const response = await requestPromise(options)
+            return response.wishlisted_listings
+        } catch (e) {
+            log.e("Airbnbapi: Couldn't get listings for wishlist " + id)
             log.e(e)
         }
     }
