@@ -438,6 +438,75 @@ class AirApi {
         }
     }
 
+    //////////// WISHLISTS SECTION ////////////
+    //////////// WISHLISTS SECTION ////////////
+    //////////// WISHLISTS SECTION ////////////
+
+    async getWishlists({ token, include_shared = true, offset = '0', limit = '30' } = {}) {
+        if (!(token || this.config.token)) {
+            _log2.default.e("Airbnbapi: Can't get a wishlist without a token");
+            return null;
+        }
+        const options = this.buildOptions({
+            route: '/v2/wishlists',
+            token,
+            qs: { _offset: offset, _limit: limit, include_shared_wishlists: include_shared }
+        });
+
+        try {
+            const response = await (0, _requestPromise2.default)(options);
+            return response.wishlists;
+        } catch (e) {
+            _log2.default.e("Airbnbapi: Couldn't get wishlists");
+            _log2.default.e(e);
+        }
+    }
+
+    async getWishlist({ token, id } = {}) {
+        if (!(token || this.config.token)) {
+            _log2.default.e("Airbnbapi: Can't get a wishlist without a token");
+            return null;
+        } else if (!id) {
+            _log2.default.e("Airbnbapi: Can't get a wishlist without an id");
+            return null;
+        }
+        const options = this.buildOptions({
+            route: '/v2/wishlists/' + id,
+            token,
+            format: 'for_web_save_modal'
+        });
+        try {
+            const response = await (0, _requestPromise2.default)(options);
+            return response.wishlist;
+        } catch (e) {
+            _log2.default.e("Airbnbapi: Couldn't get wishlist " + id);
+            _log2.default.e(e);
+        }
+    }
+
+    async getWishlistedListings({ token, id, offset = '0', limit = '30' } = {}) {
+        if (!(token || this.config.token)) {
+            _log2.default.e("Airbnbapi: Can't get a wishlist without a token");
+            return null;
+        } else if (!id) {
+            _log2.default.e("Airbnbapi: Can't get a wishlist without an id");
+            return null;
+        }
+        const options = this.buildOptions({
+            route: '/v2/wishlisted_listings?wishlist_id=' + id,
+            token,
+            format: 'for_collaborator',
+            qs: { _offset: offset, _limit: limit }
+        });
+        try {
+            const response = await (0, _requestPromise2.default)(options);
+            return response.wishlisted_listings;
+        } catch (e) {
+            _log2.default.e("Airbnbapi: Couldn't get listings for wishlist " + id);
+            _log2.default.e(e);
+        }
+    }
+
     //////////// THREADS SECTION ////////////
     //////////// THREADS SECTION ////////////
     //////////// THREADS SECTION ////////////
