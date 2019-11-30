@@ -620,16 +620,18 @@ class AirApi {
     //////////// RESERVATIONS SECTION ////////////
     //////////// RESERVATIONS SECTION ////////////
 
-    async getReservations({ token, offset = '0', limit = '20' } = {}) {
+    async getReservations({ token, offset = '0', limit = '20' } = {}, include_cohosted = false) {
         if (!(token || this.config.token)) {
             _log2.default.e("Airbnbapi: Can't get a reservation list without a token");
             return null;
-        }
+        }        
+        var qs = { _offset: offset, _limit: limit }
+        if (include_cohosted) qs.collection_strategy = 'for_reservations_list'        
         const options = this.buildOptions({
             route: '/v2/reservations',
             token,
             format: 'for_mobile_host',
-            qs: { _offset: offset, _limit: limit }
+            qs: qs
         });
         try {
             const response = await (0, _requestPromise2.default)(options);
