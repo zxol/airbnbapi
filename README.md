@@ -48,6 +48,7 @@ import airbnb from 'airbnbapijs'
 
 ## Contents
 
+1. Configuration
 1. Authorization
 1. Users
 1. Calendars
@@ -58,6 +59,20 @@ import airbnb from 'airbnbapijs'
 1. Configuration
 
 ---
+
+## CONFIGURATION
+
+Set your currency
+
+```js
+airbnb.config.currency = 'EUR'
+```
+
+Set a custom user agent
+
+```js
+airbnb.config.default_headers['User-Agent'] = '<YOUR CUSTOM USER AGENT>'
+```
 
 ## AUTHORIZATION
 
@@ -84,7 +99,7 @@ airbnb.newAccessToken({ username: 'foo@bar.com', password: 'hunter2' })
 Request a new token (v2 endpoint). Similar to the above function but returns a user info summary with much more information.
 
 ```js
-airbnb.login({ username: 'foo@bar.com', password: 'hunter2' })
+airbnb.login({ email: 'foo@bar.com', password: 'hunter2' })
 // returns a user info object (includes token) or {error: {error obj}}
 ```
 
