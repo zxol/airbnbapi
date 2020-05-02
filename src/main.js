@@ -725,15 +725,27 @@ class AirApi {
 
     // Send pre-approval to an inquiry
     // requires a id. id, and optional message
-    async sendPreApproval({ token, thread_id, listing_id, message = '' } = {}) {
+    sendPreApproval({ token, thread_id, listing_id, message = '' } = {}) {
+        return this.updateInquiry({ token, thread_id, listing_id, message, status: 'preapproved' })
+    }
+
+    // Deny an inquiry (reservation request)
+    // requires a token, thread_id, listing_id and an optional message
+    denyInquiry({ token, thread_id, listing_id, message = '' } = {}) {
+        return this.updateInquiry({ token, thread_id, listing_id, message, status: 'denied' })
+    }
+
+    // Updates an inquiry (reservation request)
+    // requires a token, thread_id, listing_id, status ('denied'|'preapproved') and optional message
+    async updateInquiry({ token, thread_id, listing_id, status, message = '' } = {}) {
         if (!(token || this.config.token)) {
-            log.e("Airbnbapi: Can't send pre-approval without a token")
+            log.e("Airbnbapi: Can't update inquiry without a token")
             return null
         } else if (!thread_id) {
-            log.e("Airbnbapi: Can't send pre-approval without a thread_id")
+            log.e("Airbnbapi: Can't update update inquiry without a thread_id")
             return null
         } else if (!listing_id) {
-            log.e("Airbnbapi: Can't send pre-approval without a listing_id")
+            log.e("Airbnbapi: Can't update update inquiry without a listing_id")
             return null
         }
         const options = this.buildOptions({
@@ -743,14 +755,14 @@ class AirApi {
             body: {
                 listing_id,
                 message,
-                status: 'preapproved'
+                status
             }
         })
         try {
             const response = await requestPromise(options)
             return response
         } catch (e) {
-            log.e("Airbnbapi: Couldn't send preapproval for thread  " + thread_id)
+            log.e("Airbnbapi: Couldn't update update inquiry for thread  " + thread_id)
             log.e(e)
         }
     }
