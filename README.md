@@ -395,6 +395,20 @@ airbnb.sendPreApproval({
 // returns confirmation
 ```
 
+### denyInquiry
+
+Deny an inquiry (reservation request).
+
+```js
+airbnb.denyInquiry({
+    token: 'faketoken3sDdfvtF9if5398j0v5nui',
+    thread_id: 2039448789,
+    listing_id: 340598483,
+    message: ''
+})
+// returns confirmation
+```
+
 ### sendReview
 
 Send a review to a guest after they have checked out. (`id` is the thread id)

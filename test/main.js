@@ -498,6 +498,27 @@ describe('airbnbapi', () => {
         })
     })
 
+    describe('#denyInquiry({token, thread_id, listing_id, message})', () => {
+        const testFunc = abba.denyInquiry.bind(abba)
+        it('should return null if no arguments are passed or arguments are missing', async () => {
+            expect(await testFunc()).to.be.null
+            expect(await testFunc({thread_id:987, listing_id:1234})).to.be.null
+            expect(await testFunc({token: 'mocktoken', listing_id:1234})).to.be.null
+            expect(await testFunc({token: 'mocktoken', thread_id:987})).to.be.null
+        })
+        nockauth()
+            .post('/v1/threads/987/update', {
+                listing_id:1234,
+                message:'',
+                status:'denied'
+            })
+            .query(true)
+            .reply(200, {response:'ok'})
+        it('should return response object', async () => {
+            expect(await testFunc({token: 'mockcorrecttoken', listing_id:1234, thread_id:987})).to.be.an('object')
+        })
+    })
+
     describe('#sendReview({token, id, comments, private_feedback, cleanliness, communication, respect_house_rules, recommend})', () => {
         const testFunc = abba.sendReview.bind(abba)
         it('should return null if no arguments are passed or arguments are missing', async () => {
