@@ -789,7 +789,7 @@ class AirApi {
             const response = await requestPromise(options)
             return response
         } catch (e) {
-            log.e("Airbnbapi: Couldn't send a review for thread  " + thread_id)
+            log.e("Airbnbapi: Couldn't send a review for thread  " + id)
             log.e(e)
         }
     }
